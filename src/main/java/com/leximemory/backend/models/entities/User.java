@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "users")
@@ -15,12 +16,12 @@ public class User {
   private String name;
   private String email;
   private String password;
-  private String registrationDate;
+  private Timestamp registrationDate;
 
   public User() {
   }
 
-  public User(Integer id, String name, String email, String password, String registrationDate) {
+  public User(Integer id, String name, String email, String password, Timestamp registrationDate) {
     this.id = id;
     this.name = name;
     this.email = email;
@@ -60,11 +61,11 @@ public class User {
     this.password = password;
   }
 
-  public String getRegistrationDate() {
+  public Timestamp getRegistrationDate() {
     return registrationDate;
   }
 
-  public void setRegistrationDate(String registrationDate) {
+  public void setRegistrationDate(Timestamp registrationDate) {
     this.registrationDate = registrationDate;
   }
 }
