@@ -58,10 +58,11 @@
 		</dependency>
 
 		<!-- Dependency for Flyway, used for database migrations -->
-    <dependency>
-        <groupId>org.flywaydb</groupId>
-        <artifactId>flyway-core</artifactId>
-    </dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>10.14.0</version>
+		</dependency>
 
 		<!-- Testcontainers base dependency for container integration testing -->
     <dependency>
@@ -111,6 +112,11 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.puppycrawl.tools</groupId>
+			<artifactId>checkstyle</artifactId>
+			<version>10.17.0</version>
+		</dependency>
 
 	</dependencies>
 
@@ -124,7 +130,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.1.2</version>
+				<version>3.4.0</version>
 				<executions>
 					<execution>
 						<id>validate</id>
