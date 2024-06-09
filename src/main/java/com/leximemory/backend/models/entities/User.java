@@ -29,6 +29,9 @@ public class User {
     this.registrationDate = registrationDate;
   }
 
+  public User(String name, String email, String encodedPassword, Timestamp timestamp) {
+  }
+
   public Integer getId() {
     return id;
   }

@@ -105,6 +105,13 @@
 			<version>2.2.224</version>
 		</dependency>
 
+		<!-- spring security dependence -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
