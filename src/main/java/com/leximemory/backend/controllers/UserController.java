@@ -28,6 +28,7 @@ public class UserController {
 
   @PostMapping()
   public ResponseEntity<ResponseDto<UserDto>> createUser(@RequestBody UserCreationDto userCreationDto) {
+    System.out.println(userCreationDto.name());
     try {
       User user = userService.findUserByEmail(userCreationDto.email());
       ResponseDto<UserDto> responseDto = new ResponseDto<UserDto>("User already exists", null);

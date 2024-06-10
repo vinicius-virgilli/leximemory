@@ -30,6 +30,10 @@ public class User {
   }
 
   public User(String name, String email, String encodedPassword, Timestamp timestamp) {
+    this.name = name;
+    this.email = email;
+    this.password = encodedPassword;
+    this.registrationDate = timestamp;
   }
 
   public Integer getId() {
