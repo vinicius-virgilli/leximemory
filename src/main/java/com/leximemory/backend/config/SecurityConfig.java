@@ -22,15 +22,18 @@ public class SecurityConfig {
    * @return the security filter chain
    * @throws Exception the exception
    */
-  @Bean
-  public SecurityFilterChain securityFilter(HttpSecurity httpSecurity) throws Exception{
-    httpSecurity.csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/users").permitAll()
-            .anyRequest().authenticated())
-        .sessionManagement(session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-    return httpSecurity.build();
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    return httpSecurity
+        .csrf(AbstractHttpConfigurer::disable)
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS
+            ))
+        .authorizeRequests(authorize -> authorize
+            .anyRequest().permitAll()
+        )
+        .build();
   }
+
 }
