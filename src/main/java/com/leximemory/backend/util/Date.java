@@ -1,6 +1,6 @@
 package com.leximemory.backend.util;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 public class Date {
 
   /**
-   * Current instant timestamp.
+   * Current LocalDate.
    *
    * @return the timestamp
    */
-  public static Timestamp currentInstant() {
-    return Timestamp.valueOf(LocalDateTime.now());
+  public static LocalDate currentDate() {
+    return LocalDateTime.now().toLocalDate();
   }
 }

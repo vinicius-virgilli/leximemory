@@ -1,9 +1,9 @@
-package com.leximemory.backend.services.exceptions;
+package com.leximemory.backend.exception;
 
 /**
  * The type User not found exception.
  */
-public class UserNotFoundException extends Exception {
+public class UserNotFoundException extends NotFoundException {
 
   /**
    * Instantiates a new User not found exception.

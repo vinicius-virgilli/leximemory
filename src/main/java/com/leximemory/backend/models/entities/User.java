@@ -1,11 +1,12 @@
 package com.leximemory.backend.models.entities;
 
+import com.leximemory.backend.controllers.dto.UserDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,5 +33,14 @@ public class User {
   @NonNull
   private String password;
   @NonNull
-  private Timestamp registrationDate;
+  private LocalDate registrationDate;
+
+  /**
+   * To dto user dto.
+   *
+   * @return the user dto
+   */
+  public UserDto toDto() {
+    return new UserDto(this.id, this.name, this.email);
+  }
 }
