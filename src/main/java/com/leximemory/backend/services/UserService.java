@@ -1,10 +1,10 @@
 package com.leximemory.backend.services;
 
 import com.leximemory.backend.controllers.dto.UserCreationDto;
-import com.leximemory.backend.models.entities.User;
-import com.leximemory.backend.models.repositories.UserRepository;
 import com.leximemory.backend.exception.UserAlreadyExists;
 import com.leximemory.backend.exception.UserNotFoundException;
+import com.leximemory.backend.models.entities.User;
+import com.leximemory.backend.models.repositories.UserRepository;
 import com.leximemory.backend.util.Date;
 import com.leximemory.backend.util.Encoder;
 import java.util.Optional;
