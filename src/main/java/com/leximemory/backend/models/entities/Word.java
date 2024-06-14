@@ -31,7 +31,6 @@ public class Word {
   private String type;
   private String word;
   private String meaning;
-  @Column(name = "example_sentence")
   private List<String> exampleSentence;
   @OneToMany(mappedBy = "word")
   private List<Question> questions;
