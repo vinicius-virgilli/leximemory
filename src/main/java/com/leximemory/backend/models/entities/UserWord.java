@@ -1,36 +1,43 @@
 package com.leximemory.backend.models.entities;
 
-import com.leximemory.backend.models.entities.entitiesId.QuestionId;
+import com.leximemory.backend.models.entities.entitiesId.UserWordId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
-import java.util.List;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * The type Question.
+ * The type User word.
  */
 @Entity
-@Table(name = "questions")
+@Table(name = "users_words")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Question {
+public class UserWord {
 
   @EmbeddedId
-  private QuestionId id;
+  private UserWordId id;
+
+  @ManyToOne
+  @MapsId("userId")
+  @JoinColumn(name = "user_id")
+  private User user;
+
   @ManyToOne
   @MapsId("wordId")
   @JoinColumn(name = "word_id")
   private Word word;
-  private String type;
-  private String statement;
-  private List<String> wrongAlternatives;
-  private String correctAlternative;
+
+  private LocalDateTime registrationDate;
+  private LocalDateTime lastRevisionDate;
+  private Integer reviewsCount;
   private Integer difficultyLevel;
+  private String temperature;
 }

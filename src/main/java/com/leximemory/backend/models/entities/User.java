@@ -5,8 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +36,9 @@ public class User {
   private String password;
   @NonNull
   private LocalDate registrationDate;
+
+  @OneToMany(mappedBy = "users")
+  private List<UserWord> userWords;
 
   /**
    * To dto user dto.
