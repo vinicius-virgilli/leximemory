@@ -4,13 +4,12 @@ import com.leximemory.backend.models.enums.SubjectsInterests;
 import java.util.List;
 
 /**
- * The type User creation dto.
+ * The type User dto.
  */
-public record UserCreationDto(
+public record UserResponseDto(
+    Integer id,
     String name,
     String email,
-    String password,
-    List<SubjectsInterests> subjectsInterests
-) {
+    List<SubjectsInterests> subjectsInterests) {
 
 }
