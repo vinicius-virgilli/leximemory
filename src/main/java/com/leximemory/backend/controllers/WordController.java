@@ -1,9 +1,13 @@
 package com.leximemory.backend.controllers;
 
+import com.leximemory.backend.controllers.dto.QuestionDto;
 import com.leximemory.backend.controllers.dto.WordCreationDto;
 import com.leximemory.backend.controllers.dto.WordResponseDto;
+import com.leximemory.backend.models.entities.Question;
 import com.leximemory.backend.models.entities.Word;
+import com.leximemory.backend.services.QuestionService;
 import com.leximemory.backend.services.WordService;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,15 +27,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class WordController {
 
   private final WordService wordService;
+  private final QuestionService questionService;
 
   /**
    * Instantiates a new Word controller.
    *
-   * @param wordService the word service
+   * @param wordService     the word service
+   * @param questionService the question service
    */
   @Autowired
-  public WordController(WordService wordService) {
+  public WordController(
+      WordService wordService,
+      QuestionService questionService
+  ) {
     this.wordService = wordService;
+    this.questionService = questionService;
   }
 
   /**
@@ -71,5 +81,42 @@ public class WordController {
   @ResponseStatus(HttpStatus.OK)
   public WordResponseDto getWordById(@PathVariable Integer id) {
     return wordService.getWordById(id).toResponseDto();
+  }
+
+  /**
+   * Create word question dto.
+   *
+   * @param wordId              the word id
+   * @param questionDto the question creation dto
+   * @return the question dto
+   */
+  @PostMapping("/{wordId}/questions")
+  @ResponseStatus(HttpStatus.CREATED)
+  public QuestionDto createWordQuestion(
+      @PathVariable("wordId") Integer wordId,
+      @RequestBody QuestionDto questionDto
+  ) {
+    Question newQuestion = questionService.createQuestion(
+        wordId,
+        questionDto.toEntity()
+    );
+    return QuestionDto.fromEntity(newQuestion);
+  }
+
+  /**
+   * Gets all word questions.
+   *
+   * @param wordId the word id
+   * @return the all word questions
+   */
+  @Transactional
+  @GetMapping("/{wordId}/questions")
+  @ResponseStatus(HttpStatus.OK)
+  public List<QuestionDto> getAllWordQuestions(
+      @PathVariable Integer wordId
+  ) {
+    Word word = wordService.getWordById(wordId);
+    List<Question> questions = word.getQuestions();
+    return questions.stream().map(QuestionDto::fromEntity).toList();
   }
 }

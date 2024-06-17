@@ -42,6 +42,12 @@ public class Word {
   @ElementCollection
   private List<String> exampleSentence;
 
+  @OneToMany(mappedBy = "word", fetch = FetchType.LAZY)
+  private List<Question> questions;
+
+  @OneToMany(mappedBy = "word", fetch = FetchType.LAZY)
+  private List<UserWord> userWords;
+
   /**
    * To creation dto word response dto.
    *

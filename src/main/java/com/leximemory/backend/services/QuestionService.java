@@ -3,7 +3,6 @@ package com.leximemory.backend.services;
 import com.leximemory.backend.models.entities.Question;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.repositories.QuestionRepository;
-import com.leximemory.backend.models.repositories.WordRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class QuestionService {
 
   private final WordService wordService;
-  private final WordRepository wordRepository;
   private final QuestionRepository questionRepository;
 
   /**
@@ -28,13 +26,11 @@ public class QuestionService {
   @Autowired
   public QuestionService(
       QuestionRepository questionRepository,
-      WordService wordService,
-      WordRepository wordRepository
+      WordService wordService
 
   ) {
     this.questionRepository = questionRepository;
     this.wordService = wordService;
-    this.wordRepository = wordRepository;
   }
 
   /**
@@ -45,11 +41,11 @@ public class QuestionService {
    * @return the string
    */
   @Transactional
-  public String addQuestionToWord(Integer wordId, Question question) {
+  public Question createQuestion(Integer wordId, Question question) {
     Word word = wordService.getWordById(wordId);
-    question.setWordId(word.getId());
-    questionRepository.save(question);
-    return "Question added to word";
+    question.setWord(word);
+
+    return questionRepository.save(question);
   }
 
   /**
@@ -57,20 +53,7 @@ public class QuestionService {
    *
    * @return the all questions
    */
-  @Transactional
   public List<Question> getAllQuestions() {
     return questionRepository.findAll();
-  }
-
-  /**
-   * Gets all word questions.
-   *
-   * @param wordId the word id
-   * @return the all word questions
-   */
-  @Transactional
-  public List<Question> getAllWordQuestions(Integer wordId) {
-    Word word = wordService.getWordById(wordId);
-    return questionRepository.findAllByWordId(wordId);
   }
 }

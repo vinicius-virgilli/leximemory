@@ -3,7 +3,7 @@ package com.leximemory.backend.models.enums;
 /**
  * The enum Question difficulty level.
  */
-public enum QuestionDifficultyLevel {
+public enum DifficultyLevel {
   /**
    * Easy question difficulty level.
    */
