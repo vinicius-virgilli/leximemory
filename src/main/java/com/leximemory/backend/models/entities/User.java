@@ -3,9 +3,11 @@ package com.leximemory.backend.models.entities;
 import com.leximemory.backend.controllers.dto.UserResponseDto;
 import com.leximemory.backend.models.enums.SubjectsInterests;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +42,9 @@ public class User {
   private List<SubjectsInterests> subjectsInterests;
   @NonNull
   private LocalDateTime registrationDate;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  private List<UserWord> userWords;
 
   /**
    * To dto user dto.

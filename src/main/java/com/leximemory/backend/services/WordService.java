@@ -67,4 +67,5 @@ public class WordService {
   public Word getWordById(Integer id) {
     return wordRepository.findById(id).orElseThrow(WordNotFoundException::new);
   }
+
 }
