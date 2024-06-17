@@ -36,4 +36,4 @@ Frontend
 
 O LexiMemory visa proporcionar uma experiência de aprendizado interativa e eficiente. Com a possibilidade de revisar palavras através de flashcards e testes, além da funcionalidade de textos com significados dinâmicos, o projeto pretende auxiliar os usuários na aquisição de um vocabulário robusto e na busca pela fluência em inglês.
 
-![DER (Diagrama Entidade Relacionamento)](https://github.com/vinicius-virgilli/leximemory/blob/feature-structure/DER%20leximemory%20version%202.pdf)
+![DER (Diagrama Entidade Relacionamento)](https://github.com/vinicius-virgilli/leximemory/blob/main/DER%20leximemory.png)
