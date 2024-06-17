@@ -3,14 +3,14 @@ package com.leximemory.backend.exception;
 /**
  * The type Custom error.
  */
-public class CustomError extends RuntimeException {
+public class AlreadyExistsException extends RuntimeException {
 
   /**
    * Instantiates a new Custom error.
    *
    * @param message the message
    */
-  public CustomError(String message) {
+  public AlreadyExistsException(String message) {
     super(message);
   }
 }

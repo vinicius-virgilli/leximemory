@@ -1,11 +1,11 @@
 package com.leximemory.backend.util;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * The type Encoder.
  */
 public class Encoder {
+
   /**
    * Encode password string.
    *
@@ -13,7 +13,7 @@ public class Encoder {
    * @return the string
    */
   public static String encodePassword(String password) {
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-    return encoder.encode(password);
+    String encoder = password;
+    return encoder;
   }
 }

@@ -3,7 +3,7 @@ package com.leximemory.backend.exception;
 /**
  * The type User already exists.
  */
-public class UserAlreadyExists extends CustomError {
+public class UserAlreadyExists extends AlreadyExistsException {
 
   /**
    * Instantiates a new User already exists.

@@ -1,4 +1,4 @@
-package com.leximemory.backend.models.entities.entitiesId;
+package com.leximemory.backend.models.entities.id;
 
 import jakarta.persistence.Embeddable;
 import lombok.Data;

@@ -1,8 +1,13 @@
 package com.leximemory.backend.models.entities;
 
-import com.leximemory.backend.models.entities.entitiesId.QuestionId;
-import jakarta.persistence.EmbeddedId;
+import com.leximemory.backend.models.enums.QuestionDifficultyLevel;
+import com.leximemory.backend.models.enums.QuestionType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -13,7 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * The type Question.
+ * The type Question. Uma word tem várias questions, e uma question tem uma word.
  */
 @Entity
 @Table(name = "questions")
@@ -22,15 +27,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Question {
 
-  @EmbeddedId
-  private QuestionId id;
-  @ManyToOne
-  @MapsId("wordId")
-  @JoinColumn(name = "word_id")
-  private Word word;
-  private String type;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  private Integer wordId;
+  private QuestionType type;
   private String statement;
   private List<String> wrongAlternatives;
   private String correctAlternative;
-  private Integer difficultyLevel;
+  private QuestionDifficultyLevel difficultyLevel;
 }
