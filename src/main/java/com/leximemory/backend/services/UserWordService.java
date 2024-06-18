@@ -1,6 +1,6 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.UserWordAlreadyExists;
+import com.leximemory.backend.exception.UserWordAlreadyExistsException;
 import com.leximemory.backend.exception.UserWordNotFoundException;
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.entities.UserWord;
@@ -70,7 +70,7 @@ public class UserWordService {
   public UserWord createUserWord(UserWord userWord) {
     try {
       getUserWordById(userWord.getId());
-      throw new UserWordAlreadyExists();
+      throw new UserWordAlreadyExistsException();
     } catch (UserWordNotFoundException e) {
       User user = userService.getUserById(userWord.getId().getUserId());
       Word word = wordService.getWordById(userWord.getId().getWordId());

@@ -1,8 +1,10 @@
 package com.leximemory.backend.controllers;
 
-import com.leximemory.backend.controllers.dto.UserCreationDto;
-import com.leximemory.backend.controllers.dto.UserResponseDto;
+import com.leximemory.backend.controllers.dto.FlashCardDto;
+import com.leximemory.backend.controllers.dto.UserDto;
+import com.leximemory.backend.models.entities.FlashCard;
 import com.leximemory.backend.models.entities.User;
+import com.leximemory.backend.services.FlashCardService;
 import com.leximemory.backend.services.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,28 +25,35 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
+  private final FlashCardService flashCardService;
+
 
   /**
    * Instantiates a new User controller.
    *
-   * @param userService the user service
+   * @param userService      the user service
+   * @param flashCardService the flash card service
    */
   @Autowired
-  public UserController(UserService userService) {
+  public UserController(
+      UserService userService,
+      FlashCardService flashCardService
+  ) {
     this.userService = userService;
+    this.flashCardService = flashCardService;
   }
 
   /**
    * Create user response entity.
    *
-   * @param userCreationDto the user creation dto
+   * @param userDto the user creation dto
    * @return the response entity
    */
   @PostMapping()
   @ResponseStatus(HttpStatus.CREATED)
-  public UserResponseDto createUser(@RequestBody UserCreationDto userCreationDto) {
-    User newUser = userService.createUser(userCreationDto);
-    return newUser.toResponseDto();
+  public UserDto createUser(@RequestBody UserDto userDto) {
+    User newUser = userService.createUser(userDto.toEntity());
+    return UserDto.fromEntity(newUser);
   }
 
   /**
@@ -54,8 +63,8 @@ public class UserController {
    */
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public List<User> getAllUsers() {
-    return userService.getAllUsers();
+  public List<UserDto> getAllUsers() {
+    return userService.getAllUsers().stream().map(UserDto::fromEntity).toList();
   }
 
   /**
@@ -65,7 +74,22 @@ public class UserController {
    * @return the user by id
    */
   @GetMapping("/{id}")
-  public User getUserById(@PathVariable Integer id) {
-    return userService.getUserById(id);
+  public UserDto getUserById(@PathVariable Integer id) {
+    return UserDto.fromEntity(userService.getUserById(id));
+  }
+
+  /**
+   * Gets user flashcards.
+   *
+   * @param userId the user id
+   * @return the user flashcards
+   */
+  @GetMapping("/{userId}/flashcards")
+  @ResponseStatus(HttpStatus.OK)
+  public List<FlashCardDto> getUserFlashcards(
+      @PathVariable Integer userId
+  ) {
+    List<FlashCard> flashCards = flashCardService.getAllByUserId(userId);
+    return flashCards.stream().map(FlashCardDto::fromEntity).toList();
   }
 }

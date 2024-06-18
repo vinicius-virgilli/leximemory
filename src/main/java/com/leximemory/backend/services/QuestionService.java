@@ -1,10 +1,12 @@
 package com.leximemory.backend.services;
 
+import com.leximemory.backend.exception.QuestionAlreadyExistsException;
 import com.leximemory.backend.models.entities.Question;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.repositories.QuestionRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,15 @@ public class QuestionService {
   @Transactional
   public Question createQuestion(Integer wordId, Question question) {
     Word word = wordService.getWordById(wordId);
+    List<Question> questions = word.getQuestions();
+
+    Optional<Question> existingQuestion = questions.stream()
+        .filter(q -> q.getStatement().equals(question.getStatement()))
+        .findFirst();
+
+    if (existingQuestion.isPresent()) {
+      throw new QuestionAlreadyExistsException();
+    }
     question.setWord(word);
 
     return questionRepository.save(question);

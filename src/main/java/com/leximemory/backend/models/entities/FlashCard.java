@@ -1,39 +1,39 @@
 package com.leximemory.backend.models.entities;
 
-import com.leximemory.backend.models.enums.DifficultyLevel;
-import com.leximemory.backend.models.enums.QuestionType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * The type Question.
+ * The type Flash card.
  */
 @Entity
-@Table(name = "questions")
+@Table(name = "flash_cards")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Question {
+public class FlashCard {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  private QuestionType type;
-  private String statement;
-  private List<String> wrongAlternatives;
-  private String correctAlternative;
-  private DifficultyLevel difficultyLevel;
+  private String front;
+  private String verse;
 
-  @ManyToOne
-  @JoinColumn(name = "word_id")
-  private Word word;
+  @OneToOne
+  @JoinColumns({
+      @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+      @JoinColumn(name = "word_id", referencedColumnName = "word_id")
+  })
+  private UserWord userWord;
 }
