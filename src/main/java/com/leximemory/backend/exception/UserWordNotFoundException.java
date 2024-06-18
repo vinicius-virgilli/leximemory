@@ -9,6 +9,6 @@ public class UserWordNotFoundException extends NotFoundException {
    * Instantiates a new User not found exception.
    */
   public UserWordNotFoundException() {
-    super("User word not found!");
+    super("UserWord not found!");
   }
 }

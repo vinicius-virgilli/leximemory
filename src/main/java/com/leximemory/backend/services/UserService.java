@@ -1,17 +1,13 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.controllers.dto.UserCreationDto;
-import com.leximemory.backend.exception.UserAlreadyExists;
+import com.leximemory.backend.exception.UserAlreadyExistsException;
 import com.leximemory.backend.exception.UserNotFoundException;
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.enums.SubjectsInterests;
 import com.leximemory.backend.models.repositories.UserRepository;
 import com.leximemory.backend.util.Encoder;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,21 +33,20 @@ public class UserService {
   /**
    * Create user.
    *
-   * @param userCreationDto the new user
+   * @param newUser the new user
    * @return the user
    */
-  public User createUser(UserCreationDto userCreationDto) {
+  public User createUser(User newUser) {
     try {
-      User user = findUserByEmail(userCreationDto.email());
-      throw new UserAlreadyExists();
+      User user = findUserByEmail(newUser.getEmail());
+      throw new UserAlreadyExistsException();
     } catch (UserNotFoundException e) {
-      List<SubjectsInterests> interests =
-          Objects.requireNonNullElse(userCreationDto.subjectsInterests(), Collections.emptyList());
+      List<SubjectsInterests> interests = newUser.getSubjectsInterests();
 
       return userRepository.save(User.builder()
-          .name(userCreationDto.name())
-          .email(userCreationDto.email())
-          .password(Encoder.encodePassword(userCreationDto.password()))
+          .name(newUser.getName())
+          .email(newUser.getEmail())
+          .password(Encoder.encodePassword(newUser.getPassword()))
           .subjectsInterests(interests)
           .registrationDate(LocalDateTime.now())
           .build());
@@ -85,6 +80,7 @@ public class UserService {
    * @param id the id
    * @return the user by id
    */
+
   public User getUserById(Integer id) {
     return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
   }

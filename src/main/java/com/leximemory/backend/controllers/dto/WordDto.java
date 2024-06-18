@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * The type Word creation dto.
  */
-public record WordResponseDto(
+public record WordDto(
     Integer id,
     WordType type,
     String word,
@@ -22,9 +22,26 @@ public record WordResponseDto(
    */
   public Word toEntity() {
     Word word = new Word();
+    word.setType(this.type);
     word.setWord(this.word());
     word.setMeaning(this.meaning());
     word.setExampleSentence(this.exampleSentence());
     return word;
+  }
+
+  /**
+   * From entity word dto.
+   *
+   * @param word the word
+   * @return the word dto
+   */
+  public static WordDto fromEntity(Word word) {
+    return new WordDto(
+        word.getId(),
+        word.getType(),
+        word.getWord(),
+        word.getMeaning(),
+        word.getExampleSentence()
+    );
   }
 }

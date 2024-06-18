@@ -25,13 +25,13 @@ public record UserWordDto(
    * @return the user word entity
    */
   public UserWord toEntity(UserWordId id) {
-    return new UserWord(
-        id,
-        LocalDateTime.now(),
-        LocalDateTime.now(),
-        0,
-        this.difficultyLevel
-    );
+    UserWord userWord = new UserWord();
+    userWord.setId(id);
+    userWord.setRegistrationDate(LocalDateTime.now());
+    userWord.setLastRevisionDate(LocalDateTime.now());
+    userWord.setReviewsCount(0);
+    userWord.setDifficultyLevel(this.difficultyLevel);
+    return userWord;
   }
 
   /**

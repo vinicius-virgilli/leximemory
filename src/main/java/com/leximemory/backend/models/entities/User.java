@@ -1,6 +1,5 @@
 package com.leximemory.backend.models.entities;
 
-import com.leximemory.backend.controllers.dto.UserResponseDto;
 import com.leximemory.backend.models.enums.SubjectsInterests;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,7 +29,6 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-
   private Integer id;
   @NonNull
   private String name;
@@ -46,12 +44,4 @@ public class User {
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private List<UserWord> userWords;
 
-  /**
-   * To dto user dto.
-   *
-   * @return the user dto
-   */
-  public UserResponseDto toResponseDto() {
-    return new UserResponseDto(this.id, this.name, this.email, this.subjectsInterests);
-  }
 }

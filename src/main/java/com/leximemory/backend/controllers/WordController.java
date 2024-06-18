@@ -1,8 +1,7 @@
 package com.leximemory.backend.controllers;
 
 import com.leximemory.backend.controllers.dto.QuestionDto;
-import com.leximemory.backend.controllers.dto.WordCreationDto;
-import com.leximemory.backend.controllers.dto.WordResponseDto;
+import com.leximemory.backend.controllers.dto.WordDto;
 import com.leximemory.backend.models.entities.Question;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.services.QuestionService;
@@ -45,18 +44,16 @@ public class WordController {
   }
 
   /**
-   * Create word creation dto.
+   * Create word word dto.
    *
-   * @param wordCreationDto the word creation dto
-   * @return the word creation dto
+   * @param wordDto the word dto
+   * @return the word dto
    */
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public WordResponseDto createWord(
-      @RequestBody WordCreationDto wordCreationDto
-  ) {
-    Word createdWord = wordService.createWord(wordCreationDto.toEntity());
-    return createdWord.toResponseDto();
+  public WordDto createWord(@RequestBody WordDto wordDto) {
+    Word newWord = wordService.createWord(wordDto.toEntity());
+    return WordDto.fromEntity(newWord);
   }
 
   /**
@@ -66,9 +63,9 @@ public class WordController {
    */
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public List<WordResponseDto> getAllWords() {
+  public List<WordDto> getAllWords() {
     List<Word> words = wordService.getAllWords();
-    return words.stream().map(Word::toResponseDto).toList();
+    return words.stream().map(WordDto::fromEntity).toList();
   }
 
   /**
@@ -79,14 +76,14 @@ public class WordController {
    */
   @GetMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public WordResponseDto getWordById(@PathVariable Integer id) {
-    return wordService.getWordById(id).toResponseDto();
+  public WordDto getWordById(@PathVariable Integer id) {
+    return WordDto.fromEntity(wordService.getWordById(id));
   }
 
   /**
    * Create word question dto.
    *
-   * @param wordId              the word id
+   * @param wordId      the word id
    * @param questionDto the question creation dto
    * @return the question dto
    */
