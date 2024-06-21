@@ -1,6 +1,6 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.FlashCardAlreadyExistsException;
+import com.leximemory.backend.exception.flashcardexceptions.FlashCardAlreadyExistsException;
 import com.leximemory.backend.models.entities.FlashCard;
 import com.leximemory.backend.models.entities.UserWord;
 import com.leximemory.backend.models.entities.id.UserWordId;

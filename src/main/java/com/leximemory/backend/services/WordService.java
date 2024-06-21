@@ -1,7 +1,7 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.WordAlreadyExistsException;
-import com.leximemory.backend.exception.WordNotFoundException;
+import com.leximemory.backend.exception.userwordexceptions.WordAlreadyExistsException;
+import com.leximemory.backend.exception.wordexceptions.WordNotFoundException;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.repositories.WordRepository;
 import jakarta.transaction.Transactional;
@@ -66,6 +66,10 @@ public class WordService {
   @Transactional
   public Word getWordById(Integer id) {
     return wordRepository.findById(id).orElseThrow(WordNotFoundException::new);
+  }
+
+  public Word getWordByWord(String word) {
+    return wordRepository.findByWord(word).orElseThrow(WordNotFoundException::new);
   }
 
 }

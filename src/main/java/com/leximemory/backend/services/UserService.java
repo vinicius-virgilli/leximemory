@@ -1,7 +1,7 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.UserAlreadyExistsException;
-import com.leximemory.backend.exception.UserNotFoundException;
+import com.leximemory.backend.exception.userexceptions.UserAlreadyExistsException;
+import com.leximemory.backend.exception.userexceptions.UserNotFoundException;
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.enums.SubjectsInterests;
 import com.leximemory.backend.models.repositories.UserRepository;

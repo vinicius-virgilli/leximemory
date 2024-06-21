@@ -2,6 +2,7 @@ package com.leximemory.backend.util;
 
 import com.leximemory.backend.models.entities.UserWord;
 import com.leximemory.backend.models.enums.Temperature;
+import java.util.List;
 
 /**
  * The type Calculator.
@@ -19,3 +20,29 @@ public class Calculator {
     return Temperature.SEVEN;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

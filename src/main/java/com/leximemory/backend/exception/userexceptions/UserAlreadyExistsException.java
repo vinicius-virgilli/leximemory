@@ -1,4 +1,6 @@
-package com.leximemory.backend.exception;
+package com.leximemory.backend.exception.userexceptions;
+
+import com.leximemory.backend.exception.AlreadyExistsException;
 
 /**
  * The type User already exists.

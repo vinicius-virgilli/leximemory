@@ -5,9 +5,9 @@ package com.leximemory.backend.models.enums;
  */
 public enum WordType {
   /**
-   * Special character word type.
+   * No word type.
    */
-  SPECIAL_CHARACTER,
+  NO_WORD,
   /**
    * Real word type.
    */
