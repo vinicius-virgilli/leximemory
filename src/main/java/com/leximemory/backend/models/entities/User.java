@@ -44,4 +44,7 @@ public class User {
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   private List<UserWord> userWords;
 
+  @OneToMany(mappedBy = "user")
+  private List<UserText> userTexts;
+
 }

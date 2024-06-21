@@ -1,6 +1,6 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.QuestionAlreadyExistsException;
+import com.leximemory.backend.exception.questionexceptions.QuestionAlreadyExistsException;
 import com.leximemory.backend.models.entities.Question;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.repositories.QuestionRepository;

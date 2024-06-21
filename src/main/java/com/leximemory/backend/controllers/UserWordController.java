@@ -97,6 +97,13 @@ public class UserWordController {
     return FlashCardDto.fromEntity(newFlashCard);
   }
 
+  /**
+   * Gets user word flashcard.
+   *
+   * @param userId the user id
+   * @param wordId the word id
+   * @return the user word flashcard
+   */
   @GetMapping("{wordId}/flashcards")
   @ResponseStatus(HttpStatus.OK)
   public FlashCardDto getUserWordFlashcard(

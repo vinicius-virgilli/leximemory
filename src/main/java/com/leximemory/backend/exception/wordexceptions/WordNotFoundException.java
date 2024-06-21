@@ -1,4 +1,6 @@
-package com.leximemory.backend.exception;
+package com.leximemory.backend.exception.wordexceptions;
+
+import com.leximemory.backend.exception.NotFoundException;
 
 /**
  * The type User not found exception.
