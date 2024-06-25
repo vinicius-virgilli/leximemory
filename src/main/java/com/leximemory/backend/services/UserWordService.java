@@ -1,13 +1,13 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.flashcardexceptions.FlashCardAlreadyExistsException.UserWordAlreadyExistsException;
-import com.leximemory.backend.exception.userwordexceptions.UserWordNotFoundException;
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.entities.UserText;
 import com.leximemory.backend.models.entities.UserWord;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.entities.id.UserWordId;
 import com.leximemory.backend.models.repositories.UserWordRepository;
+import com.leximemory.backend.services.exception.flashcardexceptions.FlashCardAlreadyExistsException.UserWordAlreadyExistsException;
+import com.leximemory.backend.services.exception.userwordexceptions.UserWordNotFoundException;
 import com.leximemory.backend.util.Calculator;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;

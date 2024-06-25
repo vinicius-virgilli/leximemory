@@ -1,9 +1,9 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.userwordexceptions.WordAlreadyExistsException;
-import com.leximemory.backend.exception.wordexceptions.WordNotFoundException;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.repositories.WordRepository;
+import com.leximemory.backend.services.exception.userwordexceptions.WordAlreadyExistsException;
+import com.leximemory.backend.services.exception.wordexceptions.WordNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;

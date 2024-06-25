@@ -1,10 +1,10 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.userexceptions.UserAlreadyExistsException;
-import com.leximemory.backend.exception.userexceptions.UserNotFoundException;
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.enums.SubjectsInterests;
 import com.leximemory.backend.models.repositories.UserRepository;
+import com.leximemory.backend.services.exception.userexceptions.UserAlreadyExistsException;
+import com.leximemory.backend.services.exception.userexceptions.UserNotFoundException;
 import com.leximemory.backend.util.Encoder;
 import java.time.LocalDateTime;
 import java.util.List;

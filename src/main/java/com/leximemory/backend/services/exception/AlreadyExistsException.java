@@ -1,4 +1,4 @@
-package com.leximemory.backend.exception;
+package com.leximemory.backend.services.exception;
 
 /**
  * The type Custom error.

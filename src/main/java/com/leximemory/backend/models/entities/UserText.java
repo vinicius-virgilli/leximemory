@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumns;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -50,5 +51,11 @@ public class UserText {
       }
   )
   private List<UserWord> content;
+
+  @OneToMany(mappedBy = "userText")
+  private List<Question> questions;
+
+  @OneToMany(mappedBy = "userText")
+  private List<Review> reviews;
 
 }

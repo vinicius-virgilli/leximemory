@@ -11,23 +11,6 @@ import java.util.List;
 public class ProvisionalGptChatApi {
 
   /**
-   * - cria texto dinamicamente de acordo com assunto, título e usando algumas palavras conhecidas.
-   *
-   * @return the list
-   */
-  public static List<String> generateText() {
-    // implement logic later
-    return Arrays.asList(
-        "This", " ", "is", " ", "your", " ", "last", " ", "opportunity", " ", "to", " ",
-        "guarantee", " ", "the", " ", "plan", " ", "most", " ", "desired", " ", "by", " ",
-        "candidates", " ", "with", " ", "the", " ", "best", " ", "cost-benefit", " ", "to", " ",
-        "boost", " ", "your", " ", "preparation", " ", "and", " ", "secure", " ", "your", " ",
-        "place", " ", "in", " ", "2024", ".", "\n", "\n", "Enjoy", " ", "and", " ", "guarantee",
-        " ", "your", " ", "subscription", "!"
-    );
-  }
-
-  /**
    * Generate word.
    *
    * @param word     the word
@@ -39,6 +22,7 @@ public class ProvisionalGptChatApi {
       WordType wordType
   ) {
     // send request to GPT chat to create fields for the word
+    // consider word type PROPER_NAME
     Word newWord = new Word();
     newWord.setWord(word);
     newWord.setMeaning("Meaning of the word");

@@ -1,6 +1,6 @@
-package com.leximemory.backend.exception.userwordexceptions;
+package com.leximemory.backend.services.exception.userwordexceptions;
 
-import com.leximemory.backend.exception.AlreadyExistsException;
+import com.leximemory.backend.services.exception.AlreadyExistsException;
 
 /**
  * The type Word already exists exeption.

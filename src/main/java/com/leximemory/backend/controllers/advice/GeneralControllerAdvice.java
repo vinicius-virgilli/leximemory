@@ -1,7 +1,7 @@
 package com.leximemory.backend.controllers.advice;
 
-import com.leximemory.backend.exception.AlreadyExistsException;
-import com.leximemory.backend.exception.NotFoundException;
+import com.leximemory.backend.services.exception.AlreadyExistsException;
+import com.leximemory.backend.services.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

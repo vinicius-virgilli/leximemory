@@ -47,4 +47,10 @@ public class User {
   @OneToMany(mappedBy = "user")
   private List<UserText> userTexts;
 
+  @OneToMany(mappedBy = "user")
+  private List<FlashCard> flashCards;
+
+  @OneToMany(mappedBy = "user")
+  private List<Review> reviews;
+
 }

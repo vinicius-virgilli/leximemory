@@ -1,9 +1,10 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.questionexceptions.QuestionAlreadyExistsException;
 import com.leximemory.backend.models.entities.Question;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.repositories.QuestionRepository;
+import com.leximemory.backend.services.exception.questionexceptions.QuestionAlreadyExistsException;
+import com.leximemory.backend.services.exception.questionexceptions.QuestionNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -66,5 +67,16 @@ public class QuestionService {
    */
   public List<Question> getAllQuestions() {
     return questionRepository.findAll();
+  }
+
+  /**
+   * Gets by id.
+   *
+   * @param questionId the question id
+   * @return the by id
+   */
+  public Question getById(Integer questionId) {
+    return questionRepository.findById(questionId)
+        .orElseThrow(QuestionNotFoundException::new);
   }
 }

@@ -1,6 +1,6 @@
-package com.leximemory.backend.exception.usertextexceptions;
+package com.leximemory.backend.services.exception.usertextexceptions;
 
-import com.leximemory.backend.exception.NotFoundException;
+import com.leximemory.backend.services.exception.NotFoundException;
 
 
 /**

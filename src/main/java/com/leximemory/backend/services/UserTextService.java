@@ -2,9 +2,6 @@ package com.leximemory.backend.services;
 
 import com.leximemory.backend.controllers.dto.UserTextDto;
 import com.leximemory.backend.controllers.dto.UserWordDto;
-import com.leximemory.backend.exception.usertextexceptions.TextContentMustHaveMoreThanOneWordException;
-import com.leximemory.backend.exception.usertextexceptions.UserTextNotFoundException;
-import com.leximemory.backend.exception.wordexceptions.WordNotFoundException;
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.entities.UserText;
 import com.leximemory.backend.models.entities.UserWord;
@@ -15,13 +12,15 @@ import com.leximemory.backend.models.enums.Temperature;
 import com.leximemory.backend.models.enums.WordType;
 import com.leximemory.backend.models.repositories.UserTextRepository;
 import com.leximemory.backend.models.repositories.UserWordRepository;
+import com.leximemory.backend.services.exception.usertextexceptions.TextContentMustHaveMoreThanOneWordException;
+import com.leximemory.backend.services.exception.usertextexceptions.UserTextNotFoundException;
+import com.leximemory.backend.services.exception.wordexceptions.WordNotFoundException;
 import com.leximemory.backend.util.ProvisionalGptChatApi;
 import com.leximemory.backend.util.TextHandler;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -170,6 +169,9 @@ public class UserTextService {
       } else if (validWords.contains(str)) {
         UserWord newUserWord = createWordAndUserWord(user, str, WordType.REAL_WORD);
         content.add(newUserWord);
+        if (newUserWord.getUserTexts() == null) {
+          newUserWord.setUserTexts(new ArrayList<>());
+        }
         newUserWord.getUserTexts().add(newUserText);
 
       } else {
@@ -212,8 +214,9 @@ public class UserTextService {
   /**
    * Create word and user word.
    *
-   * @param user   the user
-   * @param string the word
+   * @param user     the user
+   * @param string   the word
+   * @param wordType the word type
    * @return the user word
    */
   public UserWord createWordAndUserWord(
@@ -248,5 +251,16 @@ public class UserTextService {
       userWord = userWordRepository.save(newUserWord);
     }
     return userWord;
+  }
+
+  /**
+   * Gets by id.
+   *
+   * @param userTextId the user text id
+   * @return the by id
+   */
+  public UserText getById(Integer userTextId) {
+    return userTextRepository.findById(userTextId)
+        .orElseThrow(UserTextNotFoundException::new);
   }
 }

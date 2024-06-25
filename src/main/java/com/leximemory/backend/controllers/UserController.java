@@ -1,20 +1,8 @@
 package com.leximemory.backend.controllers;
 
-import com.leximemory.backend.controllers.dto.FlashCardDto;
 import com.leximemory.backend.controllers.dto.UserDto;
-import com.leximemory.backend.controllers.dto.UserTextDto;
-import com.leximemory.backend.controllers.dto.UserTextResponseDto;
-import com.leximemory.backend.controllers.dto.UserWordTextDto;
-import com.leximemory.backend.models.entities.FlashCard;
 import com.leximemory.backend.models.entities.User;
-import com.leximemory.backend.models.entities.UserText;
-import com.leximemory.backend.models.enums.DifficultyLevel;
-import com.leximemory.backend.models.enums.SubjectsInterests;
-import com.leximemory.backend.models.repositories.UserRepository;
-import com.leximemory.backend.services.FlashCardService;
 import com.leximemory.backend.services.UserService;
-import com.leximemory.backend.services.UserTextService;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,25 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
   private final UserService userService;
-  private final FlashCardService flashCardService;
-  private final UserTextService userTextService;
 
   /**
    * Instantiates a new User controller.
    *
-   * @param userService      the user service
-   * @param flashCardService the flash card service
-   * @param userTextService  the user text service
+   * @param userService the user service
    */
   @Autowired
-  public UserController(
-      UserService userService,
-      FlashCardService flashCardService,
-      UserTextService userTextService
-  ) {
+  public UserController(UserService userService) {
     this.userService = userService;
-    this.flashCardService = flashCardService;
-    this.userTextService = userTextService;
   }
 
   /**
@@ -90,66 +68,4 @@ public class UserController {
     return UserDto.fromEntity(userService.getUserById(id));
   }
 
-  /**
-   * Gets user flashcards.
-   *
-   * @param userId the user id
-   * @return the user flashcards
-   */
-  @GetMapping("/{userId}/flashcards")
-  @ResponseStatus(HttpStatus.OK)
-  public List<FlashCardDto> getUserFlashcards(
-      @PathVariable Integer userId
-  ) {
-    List<FlashCard> flashCards = flashCardService.getAllByUserId(userId);
-    return flashCards.stream().map(FlashCardDto::fromEntity).toList();
-  }
-
-  /**
-   * Create text user text dto.
-   *
-   * @param userId      the user id
-   * @param userTextDto the user text dto
-   * @return the user text dto
-   */
-  @PostMapping("/{userId}/usertexts")
-  @ResponseStatus(HttpStatus.CREATED)
-  public UserTextResponseDto createText(
-      @PathVariable Integer userId,
-      @RequestBody UserTextDto userTextDto
-  ) {
-    UserText newUserText = userTextService.createUserText(userId, userTextDto);
-    return UserTextResponseDto.fromEntity(newUserText);
-  }
-
-  /**
-   * Gets all user texts.
-   *
-   * @param userId the user id
-   * @return the all user texts
-   */
-  @GetMapping("/{userId}/usertexts")
-  @ResponseStatus(HttpStatus.OK)
-  public List<UserTextResponseDto> getAllUserTexts(
-      @PathVariable Integer userId
-  ) {
-    List<UserText> userTexts = userTextService.getAllByUserId(userId);
-    return userTexts.stream().map(UserTextResponseDto::fromEntity).toList();
-  }
-
-  /**
-   * Gets user text by id.
-   *
-   * @param userId the user id
-   * @param textId the text id
-   * @return the user text by id
-   */
-  @GetMapping("/{userId}/usertexts/{textId}")
-  @ResponseStatus(HttpStatus.OK)
-  public UserTextResponseDto getUserTextById(
-      @PathVariable Integer userId,
-      @PathVariable Integer textId
-  ) {
-    return UserTextResponseDto.fromEntity(userTextService.getUserTextById(userId, textId));
-  }
 }
