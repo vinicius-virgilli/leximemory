@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserTextController {
 
   private final UserTextService userTextService;
-  private final QuestionService questionService;
 
   /**
    * Instantiates a new User text controller.
@@ -35,7 +34,6 @@ public class UserTextController {
   @Autowired
   public UserTextController(UserTextService userTextService, QuestionService questionService) {
     this.userTextService = userTextService;
-    this.questionService = questionService;
   }
 
   /**

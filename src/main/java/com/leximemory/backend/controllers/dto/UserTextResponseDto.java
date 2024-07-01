@@ -15,7 +15,7 @@ public record UserTextResponseDto(
     DifficultyLevel difficultyLevel,
     SubjectsInterests subject,
     String title,
-    List<UserWordTextDto> content
+    List<SentenceDto> sentenceDtos
 ) {
 
   /**
@@ -32,7 +32,7 @@ public record UserTextResponseDto(
         userText.getDifficultyLevel(),
         userText.getSubject(),
         userText.getTitle(),
-        userText.getContent().stream().map(UserWordTextDto::fromEntity).toList()
+        userText.getSentences().stream().map(SentenceDto::fromEntity).toList()
     );
   }
 
@@ -51,7 +51,9 @@ public record UserTextResponseDto(
         userText.getDifficultyLevel(),
         userText.getSubject(),
         userText.getTitle(),
-        content
+        userText.getSentences().stream().map(
+            SentenceDto::fromEntity
+        ).toList()
     );
   }
 }

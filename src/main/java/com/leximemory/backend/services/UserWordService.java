@@ -1,7 +1,6 @@
 package com.leximemory.backend.services;
 
 import com.leximemory.backend.models.entities.User;
-import com.leximemory.backend.models.entities.UserText;
 import com.leximemory.backend.models.entities.UserWord;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.entities.id.UserWordId;
@@ -9,7 +8,6 @@ import com.leximemory.backend.models.repositories.UserWordRepository;
 import com.leximemory.backend.services.exception.flashcardexceptions.FlashCardAlreadyExistsException.UserWordAlreadyExistsException;
 import com.leximemory.backend.services.exception.userwordexceptions.UserWordNotFoundException;
 import com.leximemory.backend.util.Calculator;
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,17 +81,5 @@ public class UserWordService {
       userWord.setTemperature(Calculator.getTemp(userWord));
       return userWordRepository.save(userWord);
     }
-  }
-
-  /**
-   * Gets all user word texts.
-   *
-   * @param userWordId the user word id
-   * @return the all user word texts
-   */
-  @Transactional
-  public List<UserText> getAllUserWordTexts(UserWordId userWordId) {
-    UserWord userWord = getUserWordById(userWordId);
-    return userWord.getUserTexts();
   }
 }

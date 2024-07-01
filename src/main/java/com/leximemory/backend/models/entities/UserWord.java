@@ -55,6 +55,6 @@ public class UserWord {
   @OneToOne(mappedBy = "userWord")
   private FlashCard flashCard;
 
-  @ManyToMany(mappedBy = "content")
-  List<UserText> userTexts;
+  @ManyToMany(mappedBy = "sentence")
+  List<Sentence> sentences;
 }

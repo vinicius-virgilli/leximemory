@@ -19,16 +19,12 @@ public class TextHandler {
    * @param args the input arguments
    */
   public static void main(String[] args) {
-    String text = "house's cost-benefit. 2024 ! @ # (*)_ cost-benefit condições imperdíveis";
-    List<String> strings = splitTextIntoWords(text);
-    System.out.println("text = " + text);
-    System.out.println("========================");
-    System.out.println("strings = " + strings);
-    System.out.println("strings size = " + strings.size());
-    System.out.println("========================");
-    List<String> validWords = filterValidWords(strings);
-    System.out.println("validWords = " + validWords);
-    System.out.println("validWords size = " + validWords.size());
+    String text = "Hello test.";
+
+    List<List<String>> sentences = TextHandler.splitTextIntoSentences(text);
+    for (List<String> sentence : sentences) {
+      System.out.println(sentence);
+    }
   }
 
   /**
@@ -39,7 +35,7 @@ public class TextHandler {
    */
   public static List<String> splitTextIntoWords(String text) {
     List<String> words = new ArrayList<>();
-    String regex = "[\\p{L}\\p{M}0-9'-]+|[\\p{Punct}]";
+    String regex = "[\\p{L}\\p{M}0-9'-]+|[\\p{Punct}]|\\s+";
     Pattern pattern = Pattern.compile(regex);
     Matcher matcher = pattern.matcher(text);
 
@@ -69,6 +65,44 @@ public class TextHandler {
     }
 
     return new ArrayList<>(validWordsSet);
+  }
+
+  /**
+   * Count valid words integer.
+   *
+   * @param content the content
+   * @return the integer
+   */
+  public static Integer countValidWords(String content) {
+    return filterValidWords(splitTextIntoWords(content)).size();
+  }
+
+  /**
+   * Split text into sentences list.
+   *
+   * @param text the text
+   * @return the list
+   */
+  public static List<List<String>> splitTextIntoSentences(String text) {
+    List<String> words = splitTextIntoWords(text);
+    System.out.println("words = " + words);
+    List<List<String>> sentences = new ArrayList<>();
+    List<String> currentSentence = new ArrayList<>();
+
+    for (String word : words) {
+      currentSentence.add(word);
+      if (word.equals(".") || word.equals("!") || word.equals("?") || word.equals("...")) {
+        sentences.add(new ArrayList<>(currentSentence));
+        currentSentence.clear();
+      }
+    }
+
+    // Add any remaining words in case the last sentence does not end with a period
+    if (!currentSentence.isEmpty()) {
+      sentences.add(new ArrayList<>(currentSentence));
+    }
+
+    return sentences;
   }
 
   /**
