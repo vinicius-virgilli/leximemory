@@ -1,6 +1,5 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.controllers.dto.SentenceDto;
 import com.leximemory.backend.controllers.dto.UserWordDto;
 import com.leximemory.backend.models.entities.Sentence;
 import com.leximemory.backend.models.entities.User;
@@ -49,7 +48,9 @@ public class SentenceService {
       SentenceRepository sentenceRepository,
       UserWordService userWordService,
       UserWordRepository userWordRepository,
-      WordService wordService) {
+      WordService wordService,
+      UserService userService
+  ) {
     this.sentenceRepository = sentenceRepository;
     this.userWordService = userWordService;
     this.wordService = wordService;

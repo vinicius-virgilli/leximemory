@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * The type Sentence controller.
  */
 @RestController
-@RequestMapping("/users/{userId}/usertexts/{userTextId}/sentences")
+@RequestMapping("/users/{userId}/usertexts")
 public class SentenceController {
 
   private final SentenceService sentenceService;
@@ -38,7 +38,7 @@ public class SentenceController {
    * @param userTextId the user text id
    * @return the all sentences by user text id
    */
-  @GetMapping
+  @GetMapping("/{userTextId}/sentences")
   @ResponseStatus(HttpStatus.OK)
   public List<SentenceDto> getAllSentencesByUserTextId(
       @PathVariable("userId") Integer userId,

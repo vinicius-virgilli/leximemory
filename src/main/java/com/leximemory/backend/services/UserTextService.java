@@ -94,7 +94,7 @@ public class UserTextService {
     newUserText.setSentences(new ArrayList<>());
 
     UserText salvedUserText = userTextRepository.save(newUserText);
-    // user.getUserTexts().add(salvedUserText);
+    user.getUserTexts().add(salvedUserText);
 
     List<List<String>> stringList = TextHandler.splitTextIntoSentences(userTextDto.content());
 

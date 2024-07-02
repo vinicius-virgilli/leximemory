@@ -12,6 +12,7 @@ public record WordDto(
     WordType type,
     String word,
     String meaning,
+    String audio,
     List<String> exampleSentence
 ) {
 
@@ -41,6 +42,7 @@ public record WordDto(
         word.getType(),
         word.getWord(),
         word.getMeaning(),
+        word.getAudio().getAudio(),
         word.getExampleSentence()
     );
   }

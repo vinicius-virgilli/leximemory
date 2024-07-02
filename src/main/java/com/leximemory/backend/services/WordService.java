@@ -4,6 +4,7 @@ import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.repositories.WordRepository;
 import com.leximemory.backend.services.exception.userwordexceptions.WordAlreadyExistsException;
 import com.leximemory.backend.services.exception.wordexceptions.WordNotFoundException;
+import com.leximemory.backend.util.AudioHandler;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -17,15 +18,21 @@ import org.springframework.stereotype.Service;
 public class WordService {
 
   private final WordRepository wordRepository;
+  private final AudioService audioService;
 
   /**
    * Instantiates a new Word service.
    *
    * @param wordRepository the word repository
+   * @param audioService   the audio service
    */
   @Autowired
-  public WordService(WordRepository wordRepository) {
+  public WordService(
+      WordRepository wordRepository,
+      AudioService audioService
+  ) {
     this.wordRepository = wordRepository;
+    this.audioService = audioService;
   }
 
   /**
@@ -44,6 +51,9 @@ public class WordService {
     if (existingWord.isPresent()) {
       throw new WordAlreadyExistsException();
     }
+
+    newWord.setAudio(audioService.createWordAudio(newWord));
+
     return wordRepository.save(newWord);
   }
 
@@ -68,6 +78,12 @@ public class WordService {
     return wordRepository.findById(id).orElseThrow(WordNotFoundException::new);
   }
 
+  /**
+   * Gets word by word.
+   *
+   * @param word the word
+   * @return the word by word
+   */
   public Word getWordByWord(String word) {
     return wordRepository.findByWord(word).orElseThrow(WordNotFoundException::new);
   }

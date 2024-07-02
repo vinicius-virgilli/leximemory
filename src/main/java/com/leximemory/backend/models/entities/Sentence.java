@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -42,5 +43,8 @@ public class Sentence {
   @ManyToOne
   @JoinColumn(name = "user_text_id")
   private UserText userText;
+
+  @OneToOne(mappedBy = "sentence")
+  private Audio audio;
 
 }
