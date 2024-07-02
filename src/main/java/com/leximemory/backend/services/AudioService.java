@@ -2,8 +2,10 @@ package com.leximemory.backend.services;
 
 import com.leximemory.backend.models.entities.Audio;
 import com.leximemory.backend.models.entities.Word;
+import com.leximemory.backend.models.enums.Speed;
 import com.leximemory.backend.models.repositories.AudioRepository;
 import com.leximemory.backend.util.AudioHandler;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,8 @@ public class AudioService {
   public Audio createWordAudio(Word word) {
     Audio audio = new Audio();
     audio.setWord(word);
-    audio.setAudio(AudioHandler.getWordAudio(word.getWord()));
+    audio.setSlowAudio(AudioHandler.getWordAudio(word.getWord(), Speed.SLOW));
+    audio.setMediumAudio(AudioHandler.getWordAudio(word.getWord(), Speed.MEDIUM));
     return audioRepository.save(audio);
   }
 }

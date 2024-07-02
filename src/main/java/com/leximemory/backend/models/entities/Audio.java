@@ -1,10 +1,12 @@
 package com.leximemory.backend.models.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -25,7 +27,10 @@ public class Audio {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  private String audio;
+  @Column(columnDefinition = "LONGTEXT")
+  private String slowAudio;
+  @Column(columnDefinition = "LONGTEXT")
+  private String mediumAudio;
 
   @OneToOne
   @JoinColumn(name = "word_id")

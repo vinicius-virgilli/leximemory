@@ -33,4 +33,7 @@ build/
 .vscode/
 
 ### word files ###
-/src/main/resources/words
+/src/main/resources/words/
+
+### keys ###
+.env

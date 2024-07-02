@@ -16,6 +16,7 @@ import com.leximemory.backend.services.exception.wordexceptions.WordNotFoundExce
 import com.leximemory.backend.util.ProvisionalGptChatApi;
 import com.leximemory.backend.util.TextHandler;
 import jakarta.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

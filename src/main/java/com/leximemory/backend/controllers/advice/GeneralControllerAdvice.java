@@ -3,6 +3,7 @@ package com.leximemory.backend.controllers.advice;
 import com.leximemory.backend.services.exception.AlreadyExistsException;
 import com.leximemory.backend.services.exception.MethodArgumentNotValidException;
 import com.leximemory.backend.services.exception.NotFoundException;
+import com.leximemory.backend.services.exception.wordexceptions.WordIoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -47,5 +48,16 @@ public class GeneralControllerAdvice {
       MethodArgumentNotValidException e
   ) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+  }
+
+  /**
+   * Handle word io exception response entity.
+   *
+   * @param e the e
+   * @return the response entity
+   */
+  @ExceptionHandler(WordIoException.class)
+  public ResponseEntity<String> handleWordIoException(WordIoException e) {
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
   }
 }

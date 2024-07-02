@@ -7,6 +7,7 @@ import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.services.QuestionService;
 import com.leximemory.backend.services.WordService;
 import jakarta.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,7 @@ public class WordController {
   }
 
   /**
-   * Create word word dto.
+   * Create word.
    *
    * @param wordDto the word dto
    * @return the word dto
