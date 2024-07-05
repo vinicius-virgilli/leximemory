@@ -1,4 +1,4 @@
-package com.leximemory.backend.controllers.dto;
+package com.leximemory.backend.controllers.dto.userworddto;
 
 import com.leximemory.backend.models.entities.UserWord;
 import com.leximemory.backend.models.entities.id.UserWordId;
@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  */
 public record UserWordDto(
     UserWordId id,
+    String word,
     LocalDateTime registrationDate,
     LocalDateTime lastReviewDate,
     Integer reviewsCount,
@@ -27,10 +28,10 @@ public record UserWordDto(
   public UserWord toEntity(UserWordId id) {
     UserWord userWord = new UserWord();
     userWord.setId(id);
-    userWord.setRegistrationDate(LocalDateTime.now());
-    userWord.setLastRevisionDate(LocalDateTime.now());
-    userWord.setReviewsCount(0);
-    userWord.setDifficultyLevel(this.difficultyLevel);
+    userWord.setRegistrationDate(registrationDate);
+    userWord.setLastRevisionDate(lastReviewDate);
+    userWord.setReviewsCount(reviewsCount);
+    userWord.setDifficultyLevel(difficultyLevel);
     return userWord;
   }
 
@@ -43,6 +44,7 @@ public record UserWordDto(
   public static UserWordDto fromEntity(UserWord userWord) {
     return new UserWordDto(
         userWord.getId(),
+        userWord.getWord().getWord(),
         userWord.getRegistrationDate(),
         userWord.getLastRevisionDate(),
         userWord.getReviewsCount(),

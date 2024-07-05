@@ -1,6 +1,6 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.controllers.dto.ReviewDto;
+import com.leximemory.backend.controllers.dto.reviewdto.ReviewDto;
 import com.leximemory.backend.models.entities.FlashCard;
 import com.leximemory.backend.models.entities.Question;
 import com.leximemory.backend.models.entities.Review;

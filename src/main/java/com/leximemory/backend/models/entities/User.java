@@ -1,6 +1,7 @@
 package com.leximemory.backend.models.entities;
 
 import com.leximemory.backend.models.enums.SubjectsInterests;
+import com.leximemory.backend.models.enums.UserType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +31,8 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+
+  private UserType type;
   @NonNull
   private String name;
   @NonNull

@@ -1,6 +1,6 @@
 package com.leximemory.backend.controllers;
 
-import com.leximemory.backend.controllers.dto.FlashCardDto;
+import com.leximemory.backend.controllers.dto.flashcarddto.FlashCardDto;
 import com.leximemory.backend.models.entities.FlashCard;
 import com.leximemory.backend.services.FlashCardService;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.leximemory.backend.controllers.dto;
+package com.leximemory.backend.controllers.dto.userdto;
 
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.enums.SubjectsInterests;

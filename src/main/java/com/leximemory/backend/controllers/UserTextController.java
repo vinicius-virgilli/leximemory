@@ -1,7 +1,7 @@
 package com.leximemory.backend.controllers;
 
-import com.leximemory.backend.controllers.dto.UserTextDto;
-import com.leximemory.backend.controllers.dto.UserTextResponseDto;
+import com.leximemory.backend.controllers.dto.usertextdto.UserTextDto;
+import com.leximemory.backend.controllers.dto.usertextdto.UserTextResponseDto;
 import com.leximemory.backend.models.entities.UserText;
 import com.leximemory.backend.services.QuestionService;
 import com.leximemory.backend.services.UserTextService;

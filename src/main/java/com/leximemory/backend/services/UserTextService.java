@@ -1,6 +1,6 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.controllers.dto.UserTextDto;
+import com.leximemory.backend.controllers.dto.usertextdto.UserTextDto;
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.entities.UserText;
 import com.leximemory.backend.models.enums.DifficultyLevel;
@@ -99,7 +99,7 @@ public class UserTextService {
     List<List<String>> stringList = TextHandler.splitTextIntoSentences(userTextDto.content());
 
     stringList.forEach(
-        strings -> sentenceService.createSentence(salvedUserText, strings
+        strings -> sentenceService.createTextSentence(user, salvedUserText, strings
     ));
 
     return salvedUserText;

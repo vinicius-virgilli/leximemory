@@ -80,8 +80,35 @@ public class UserService {
    * @param id the id
    * @return the user by id
    */
-
   public User getUserById(Integer id) {
     return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+  }
+
+  /**
+   * Create admin user.
+   *
+   * @return the user
+   */
+  public User createAdmin() {
+    return userRepository.save(User.builder()
+        .name("admin")
+        .email("admin@admin.com")
+        .password(Encoder.encodePassword("admin"))
+        .subjectsInterests(List.of(SubjectsInterests.TECHNOLOGY_AND_INOVATION))
+        .registrationDate(LocalDateTime.now())
+        .build());
+  }
+
+  /**
+   * Gets admin.
+   *
+   * @return the admin
+   */
+  public User getAdmin() {
+    try {
+      return findUserByEmail("admin@admin.com");
+    } catch (UserNotFoundException e) {
+      return createAdmin();
+    }
   }
 }

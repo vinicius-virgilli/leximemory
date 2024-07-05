@@ -1,4 +1,4 @@
-package com.leximemory.backend.controllers.dto;
+package com.leximemory.backend.controllers.dto.usertextdto;
 
 import com.leximemory.backend.models.entities.UserText;
 import com.leximemory.backend.models.enums.DifficultyLevel;

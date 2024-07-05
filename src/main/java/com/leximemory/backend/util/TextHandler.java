@@ -1,5 +1,7 @@
 package com.leximemory.backend.util;
 
+import com.leximemory.backend.models.entities.UserWord;
+import com.leximemory.backend.models.enums.WordType;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * The type Text handler.
@@ -78,6 +81,32 @@ public class TextHandler {
   }
 
   /**
+   * Count new valid words integer.
+   *
+   * @param userWords the user words
+   * @param strings   the strings
+   * @return the integer
+   */
+  public static Integer countNewValidWords(
+      List<UserWord> userWords, List<String> strings) {
+    int newValidWords = 0;
+
+    List<String> words = new ArrayList<>();
+    if (userWords.get(0).getWord() != null) {
+      words = userWords.stream()
+          .map(w -> w.getWord().getWord().toLowerCase()).toList();
+    }
+
+    for (String str : strings) {
+      if (!words.contains(str.toLowerCase())) {
+        newValidWords += 1;
+      }
+    }
+
+    return newValidWords;
+  }
+
+  /**
    * Split text into sentences list.
    *
    * @param text the text
@@ -106,18 +135,31 @@ public class TextHandler {
   }
 
   /**
-   * Convert words to text string.
+   * Build sentence string.
    *
-   * @param words the words
+   * @param userWords the user words
    * @return the string
    */
-  public static String convertWordsToText(List<String> words) {
-    StringBuilder sb = new StringBuilder();
+  public static String buildSentence(List<UserWord> userWords) {
+    return userWords.stream()
+        .map(userWord -> userWord.getWord().getWord())
+        .collect(Collectors.joining(" "));
+  }
 
-    for (String word : words) {
-      sb.append(word);
+  /**
+   * Gets word type.
+   *
+   * @param word the word
+   * @return the word type
+   */
+  public static WordType getWordType(String word) {
+    String regex = "^[\\p{Punct}\\s\\d]+$";
+    Pattern pattern = Pattern.compile(regex);
+
+    if (pattern.matcher(word).matches()) {
+      return WordType.NO_WORD;
+    } else {
+      return WordType.REAL_WORD;
     }
-
-    return sb.toString();
   }
 }

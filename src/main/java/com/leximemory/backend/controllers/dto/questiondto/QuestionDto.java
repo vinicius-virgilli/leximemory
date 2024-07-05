@@ -1,4 +1,4 @@
-package com.leximemory.backend.controllers.dto;
+package com.leximemory.backend.controllers.dto.questiondto;
 
 import com.leximemory.backend.models.entities.Question;
 import com.leximemory.backend.models.enums.DifficultyLevel;

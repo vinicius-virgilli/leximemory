@@ -1,4 +1,4 @@
-package com.leximemory.backend.controllers.dto;
+package com.leximemory.backend.controllers.dto.reviewdto;
 
 import com.leximemory.backend.models.entities.FlashCard;
 import com.leximemory.backend.models.entities.Question;

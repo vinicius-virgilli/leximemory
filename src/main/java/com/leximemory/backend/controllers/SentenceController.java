@@ -1,6 +1,6 @@
 package com.leximemory.backend.controllers;
 
-import com.leximemory.backend.controllers.dto.SentenceDto;
+import com.leximemory.backend.controllers.dto.sentencedto.SentenceDto;
 import com.leximemory.backend.models.entities.Sentence;
 import com.leximemory.backend.services.SentenceService;
 import java.util.List;

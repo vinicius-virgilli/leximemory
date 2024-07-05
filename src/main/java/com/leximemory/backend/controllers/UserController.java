@@ -1,6 +1,6 @@
 package com.leximemory.backend.controllers;
 
-import com.leximemory.backend.controllers.dto.UserDto;
+import com.leximemory.backend.controllers.dto.userdto.UserDto;
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.services.UserService;
 import java.util.List;

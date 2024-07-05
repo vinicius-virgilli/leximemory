@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -27,10 +28,9 @@ public class Audio {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @Column(columnDefinition = "LONGTEXT")
-  private String slowAudio;
-  @Column(columnDefinition = "LONGTEXT")
-  private String mediumAudio;
+  @Lob
+  @Column(columnDefinition = "LONGBLOB")
+  private byte[] audio;
 
   @OneToOne
   @JoinColumn(name = "word_id")

@@ -1,5 +1,6 @@
-package com.leximemory.backend.controllers.dto;
+package com.leximemory.backend.controllers.dto.worddto;
 
+import com.leximemory.backend.controllers.dto.sentencedto.SentenceDto;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.enums.WordType;
 import java.util.List;
@@ -12,9 +13,8 @@ public record WordDto(
     WordType type,
     String word,
     String meaning,
-    String slowAudio,
-    String mediumAudio,
-    List<String> exampleSentence
+    Integer wordRank,
+    Integer repetitions
 ) {
 
   /**
@@ -24,10 +24,7 @@ public record WordDto(
    */
   public Word toEntity() {
     Word word = new Word();
-    word.setType(this.type);
     word.setWord(this.word());
-    word.setMeaning(this.meaning());
-    word.setExampleSentence(this.exampleSentence());
     return word;
   }
 
@@ -43,9 +40,8 @@ public record WordDto(
         word.getType(),
         word.getWord(),
         word.getMeaning(),
-        word.getAudio().getSlowAudio(),
-        word.getAudio().getMediumAudio(),
-        word.getExampleSentence()
+        word.getWordRank(),
+        word.getRepetitions()
     );
   }
 }

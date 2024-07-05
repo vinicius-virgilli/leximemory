@@ -1,5 +1,6 @@
-package com.leximemory.backend.controllers.dto;
+package com.leximemory.backend.controllers.dto.sentencedto;
 
+import com.leximemory.backend.controllers.dto.usertextdto.UserWordTextDto;
 import com.leximemory.backend.models.entities.Sentence;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import java.util.List;
  */
 public record SentenceDto(
     Integer id,
-    Integer userTextId,
     List<UserWordTextDto> sentence
 ) {
 
@@ -30,7 +30,6 @@ public record SentenceDto(
   public static SentenceDto fromEntity(Sentence sentence) {
     return new SentenceDto(
         sentence.getId(),
-        sentence.getUserText().getId(),
         sentence.getSentence().stream().map(UserWordTextDto::fromEntity).toList()
     );
   }

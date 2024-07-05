@@ -1,6 +1,7 @@
 package com.leximemory.backend.models.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -46,6 +47,6 @@ public class FlashCard {
   )
   private User user;
 
-  @ManyToMany(mappedBy = "flashcards")
+  @ManyToMany(mappedBy = "flashcards", fetch = FetchType.LAZY)
   private List<Review> reviews;
 }

@@ -1,6 +1,6 @@
 package com.leximemory.backend.controllers;
 
-import com.leximemory.backend.controllers.dto.ReviewDto;
+import com.leximemory.backend.controllers.dto.reviewdto.ReviewDto;
 import com.leximemory.backend.models.entities.Review;
 import com.leximemory.backend.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;

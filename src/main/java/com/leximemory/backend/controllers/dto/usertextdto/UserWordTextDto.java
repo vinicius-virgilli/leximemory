@@ -1,5 +1,6 @@
-package com.leximemory.backend.controllers.dto;
+package com.leximemory.backend.controllers.dto.usertextdto;
 
+import com.leximemory.backend.controllers.dto.worddto.WordDto;
 import com.leximemory.backend.models.entities.UserWord;
 import com.leximemory.backend.models.enums.DifficultyLevel;
 import com.leximemory.backend.models.enums.Temperature;

@@ -76,9 +76,20 @@ public class UserWordService {
       Word word = wordService.getWordById(userWord.getId().getWordId());
       userWord.setUser(user);
       userWord.setWord(word);
-      userWord.setRegistrationDate(LocalDateTime.now());
-      userWord.setLastRevisionDate(LocalDateTime.now());
-      userWord.setTemperature(Calculator.getTemp(userWord));
+
+      if (userWord.getRegistrationDate() == null) {
+        userWord.setRegistrationDate(LocalDateTime.now());
+      }
+      if (userWord.getLastRevisionDate() == null) {
+        userWord.setLastRevisionDate(LocalDateTime.now());
+      }
+      if (userWord.getTemperature() == null) {
+        userWord.setTemperature(Calculator.getTemp(userWord));
+      }
+      if (userWord.getReviewsCount() == null) {
+        userWord.setReviewsCount(0);
+      }
+
       return userWordRepository.save(userWord);
     }
   }

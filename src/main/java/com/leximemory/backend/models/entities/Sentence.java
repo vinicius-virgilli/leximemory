@@ -1,6 +1,7 @@
 package com.leximemory.backend.models.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,6 +29,8 @@ public class Sentence {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  private String textSentence;
+  private String translation;
 
   @ManyToMany
   @JoinTable(
@@ -39,6 +42,10 @@ public class Sentence {
       }
   )
   private List<UserWord> sentence;
+
+  @ManyToOne
+  @JoinColumn(name = "word_id")
+  private Word word;
 
   @ManyToOne
   @JoinColumn(name = "user_text_id")
