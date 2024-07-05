@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### word files ###
+/src/main/resources/words/
+
+### keys ###
+.env

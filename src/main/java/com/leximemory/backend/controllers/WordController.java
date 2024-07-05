@@ -1,7 +1,10 @@
 package com.leximemory.backend.controllers;
 
-import com.leximemory.backend.controllers.dto.QuestionDto;
-import com.leximemory.backend.controllers.dto.WordDto;
+import com.leximemory.backend.controllers.dto.questiondto.QuestionDto;
+import com.leximemory.backend.controllers.dto.worddto.CompleteWordDto;
+import com.leximemory.backend.controllers.dto.worddto.WordCreationDto;
+import com.leximemory.backend.controllers.dto.worddto.WordDto;
+import com.leximemory.backend.controllers.dto.worddto.WordResponseDto;
 import com.leximemory.backend.models.entities.Question;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.services.QuestionService;
@@ -13,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  * The type Word controller.
  */
 @RestController
-@RequestMapping("/words")
+@RequestMapping
 public class WordController {
 
   private final WordService wordService;
@@ -45,16 +49,16 @@ public class WordController {
   }
 
   /**
-   * Create word word dto.
+   * Create word word response dto.
    *
-   * @param wordDto the word dto
-   * @return the word dto
+   * @param wordCreationDto the word creation dto
+   * @return the word response dto
    */
-  @PostMapping
+  @PostMapping("/words")
   @ResponseStatus(HttpStatus.CREATED)
-  public WordDto createWord(@RequestBody WordDto wordDto) {
-    Word newWord = wordService.createWord(wordDto.toEntity());
-    return WordDto.fromEntity(newWord);
+  public WordResponseDto createWord(@RequestBody WordCreationDto wordCreationDto) {
+    Word newWord = wordService.createWord(wordCreationDto);
+    return WordResponseDto.fromEntity(newWord);
   }
 
   /**
@@ -62,7 +66,7 @@ public class WordController {
    *
    * @return the all words
    */
-  @GetMapping
+  @GetMapping("/words")
   @ResponseStatus(HttpStatus.OK)
   public List<WordDto> getAllWords() {
     List<Word> words = wordService.getAllWords();
@@ -75,7 +79,7 @@ public class WordController {
    * @param id the id
    * @return the word by id
    */
-  @GetMapping("/{id}")
+  @GetMapping("/words/{id}")
   @ResponseStatus(HttpStatus.OK)
   public WordDto getWordById(@PathVariable Integer id) {
     return WordDto.fromEntity(wordService.getWordById(id));
@@ -88,7 +92,7 @@ public class WordController {
    * @param questionDto the question creation dto
    * @return the question dto
    */
-  @PostMapping("/{wordId}/questions")
+  @PostMapping("/words/{wordId}/questions")
   @ResponseStatus(HttpStatus.CREATED)
   public QuestionDto createWordQuestion(
       @PathVariable("wordId") Integer wordId,
@@ -108,7 +112,7 @@ public class WordController {
    * @return the all word questions
    */
   @Transactional
-  @GetMapping("/{wordId}/questions")
+  @GetMapping("/words/{wordId}/questions")
   @ResponseStatus(HttpStatus.OK)
   public List<QuestionDto> getAllWordQuestions(
       @PathVariable Integer wordId
@@ -124,12 +128,31 @@ public class WordController {
    * @param string the string
    * @return the word dto
    */
-  @GetMapping("/search")
+  @GetMapping("/words/search")
   @ResponseStatus(HttpStatus.OK)
   public WordDto searchWord(
       @RequestParam("word") String string
   ) {
     Word word = wordService.getWordByWord(string);
     return WordDto.fromEntity(word);
+  }
+
+  /**
+   * Create example sentences word response dto.
+   *
+   * @param userId          the user id
+   * @param wordId          the word id
+   * @param wordCreationDto the word creation dto
+   * @return the word response dto
+   */
+  @PutMapping("users/{userId}/words/{wordId}/sentences")
+  @ResponseStatus(HttpStatus.OK)
+  public CompleteWordDto createExampleSentences(
+      @PathVariable("userId") Integer userId,
+      @PathVariable("wordId") Integer wordId,
+      @RequestBody WordCreationDto wordCreationDto
+  ) {
+    Word word = wordService.createWordExampleSentences(userId, wordId, wordCreationDto);
+    return CompleteWordDto.fromEntity(word);
   }
 }

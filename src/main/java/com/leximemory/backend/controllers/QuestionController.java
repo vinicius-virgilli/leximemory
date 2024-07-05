@@ -1,7 +1,6 @@
 package com.leximemory.backend.controllers;
 
-import com.leximemory.backend.controllers.dto.QuestionDto;
-import com.leximemory.backend.models.entities.Question;
+import com.leximemory.backend.controllers.dto.questiondto.QuestionDto;
 import com.leximemory.backend.services.QuestionService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

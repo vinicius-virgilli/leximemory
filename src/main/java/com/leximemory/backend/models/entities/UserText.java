@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumns;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -40,15 +41,13 @@ public class UserText {
   @JoinColumn(name = "user_id")
   private User user;
 
-  @ManyToMany
-  @JoinTable(
-      name = "user_text_user_word",
-      joinColumns = @JoinColumn(name = "user_text_id"),
-      inverseJoinColumns = {
-          @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-          @JoinColumn(name = "word_id", referencedColumnName = "word_id")
-      }
-  )
-  private List<UserWord> content;
+  @OneToMany(mappedBy = "userText")
+  private List<Sentence> sentences;
+
+  @OneToMany(mappedBy = "userText")
+  private List<Question> questions;
+
+  @OneToMany(mappedBy = "userText")
+  private List<Review> reviews;
 
 }

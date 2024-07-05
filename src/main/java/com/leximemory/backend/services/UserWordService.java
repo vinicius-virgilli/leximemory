@@ -1,15 +1,13 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.flashcardexceptions.FlashCardAlreadyExistsException.UserWordAlreadyExistsException;
-import com.leximemory.backend.exception.userwordexceptions.UserWordNotFoundException;
 import com.leximemory.backend.models.entities.User;
-import com.leximemory.backend.models.entities.UserText;
 import com.leximemory.backend.models.entities.UserWord;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.entities.id.UserWordId;
 import com.leximemory.backend.models.repositories.UserWordRepository;
+import com.leximemory.backend.services.exception.flashcardexceptions.FlashCardAlreadyExistsException.UserWordAlreadyExistsException;
+import com.leximemory.backend.services.exception.userwordexceptions.UserWordNotFoundException;
 import com.leximemory.backend.util.Calculator;
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,22 +76,21 @@ public class UserWordService {
       Word word = wordService.getWordById(userWord.getId().getWordId());
       userWord.setUser(user);
       userWord.setWord(word);
-      userWord.setRegistrationDate(LocalDateTime.now());
-      userWord.setLastRevisionDate(LocalDateTime.now());
-      userWord.setTemperature(Calculator.getTemp(userWord));
+
+      if (userWord.getRegistrationDate() == null) {
+        userWord.setRegistrationDate(LocalDateTime.now());
+      }
+      if (userWord.getLastRevisionDate() == null) {
+        userWord.setLastRevisionDate(LocalDateTime.now());
+      }
+      if (userWord.getTemperature() == null) {
+        userWord.setTemperature(Calculator.getTemp(userWord));
+      }
+      if (userWord.getReviewsCount() == null) {
+        userWord.setReviewsCount(0);
+      }
+
       return userWordRepository.save(userWord);
     }
-  }
-
-  /**
-   * Gets all user word texts.
-   *
-   * @param userWordId the user word id
-   * @return the all user word texts
-   */
-  @Transactional
-  public List<UserText> getAllUserWordTexts(UserWordId userWordId) {
-    UserWord userWord = getUserWordById(userWordId);
-    return userWord.getUserTexts();
   }
 }

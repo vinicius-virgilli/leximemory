@@ -1,10 +1,10 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.userexceptions.UserAlreadyExistsException;
-import com.leximemory.backend.exception.userexceptions.UserNotFoundException;
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.enums.SubjectsInterests;
 import com.leximemory.backend.models.repositories.UserRepository;
+import com.leximemory.backend.services.exception.userexceptions.UserAlreadyExistsException;
+import com.leximemory.backend.services.exception.userexceptions.UserNotFoundException;
 import com.leximemory.backend.util.Encoder;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -80,8 +80,35 @@ public class UserService {
    * @param id the id
    * @return the user by id
    */
-
   public User getUserById(Integer id) {
     return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+  }
+
+  /**
+   * Create admin user.
+   *
+   * @return the user
+   */
+  public User createAdmin() {
+    return userRepository.save(User.builder()
+        .name("admin")
+        .email("admin@admin.com")
+        .password(Encoder.encodePassword("admin"))
+        .subjectsInterests(List.of(SubjectsInterests.TECHNOLOGY_AND_INOVATION))
+        .registrationDate(LocalDateTime.now())
+        .build());
+  }
+
+  /**
+   * Gets admin.
+   *
+   * @return the admin
+   */
+  public User getAdmin() {
+    try {
+      return findUserByEmail("admin@admin.com");
+    } catch (UserNotFoundException e) {
+      return createAdmin();
+    }
   }
 }

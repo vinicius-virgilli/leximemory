@@ -1,10 +1,12 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.exception.flashcardexceptions.FlashCardAlreadyExistsException;
 import com.leximemory.backend.models.entities.FlashCard;
+import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.entities.UserWord;
 import com.leximemory.backend.models.entities.id.UserWordId;
 import com.leximemory.backend.models.repositories.FlashCardRepository;
+import com.leximemory.backend.services.exception.flashcardexceptions.FlashCardAlreadyExistsException;
+import com.leximemory.backend.services.exception.flashcardexceptions.FlashcardNotFoundException;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class FlashCardService {
 
+  private final UserService userService;
   private final UserWordService userWordService;
   private final FlashCardRepository flashCardRepository;
 
@@ -24,13 +27,17 @@ public class FlashCardService {
    *
    * @param userWordService     the user word service
    * @param flashCardRepository the flash card repository
+   * @param userService         the user service
    */
   @Autowired
   public FlashCardService(
       UserWordService userWordService,
-      FlashCardRepository flashCardRepository) {
+      FlashCardRepository flashCardRepository,
+      UserService userService
+  ) {
     this.userWordService = userWordService;
     this.flashCardRepository = flashCardRepository;
+    this.userService = userService;
   }
 
   /**
@@ -46,6 +53,8 @@ public class FlashCardService {
     FlashCard flashCard = userWord.getFlashCard();
     if (Objects.isNull(flashCard)) {
       newFlashCard.setUserWord(userWord);
+      User user = userService.getUserById(userWordId.getUserId());
+      newFlashCard.setUser(user);
 
       return flashCardRepository.save(newFlashCard);
     }
@@ -65,16 +74,25 @@ public class FlashCardService {
   }
 
   /**
-   * Gets by user id.
+   * Gets all by user id.
    *
    * @param userId the user id
-   * @return the by user id
+   * @return the all by user id
    */
   public List<FlashCard> getAllByUserId(Integer userId) {
-    List<FlashCard> flashCards = flashCardRepository.findAll();
-    return flashCards.stream().filter(
-        flashCard -> Objects.equals(flashCard.getUserWord().getId().getUserId(), userId)
-    ).toList();
+    User user = userService.getUserById(userId);
+    return user.getFlashCards();
+  }
+
+  /**
+   * Gets by id.
+   *
+   * @param flashcardId the flashcard id
+   * @return the by id
+   */
+  public FlashCard getById(Integer flashcardId) {
+    return flashCardRepository.findById(flashcardId)
+        .orElseThrow(FlashcardNotFoundException::new);
   }
 }
 

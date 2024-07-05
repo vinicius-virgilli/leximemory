@@ -2,30 +2,13 @@ package com.leximemory.backend.util;
 
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.enums.WordType;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The type Provisional gpt chat api.
  */
 public class ProvisionalGptChatApi {
-
-  /**
-   * - cria texto dinamicamente de acordo com assunto, título e usando algumas palavras conhecidas.
-   *
-   * @return the list
-   */
-  public static List<String> generateText() {
-    // implement logic later
-    return Arrays.asList(
-        "This", " ", "is", " ", "your", " ", "last", " ", "opportunity", " ", "to", " ",
-        "guarantee", " ", "the", " ", "plan", " ", "most", " ", "desired", " ", "by", " ",
-        "candidates", " ", "with", " ", "the", " ", "best", " ", "cost-benefit", " ", "to", " ",
-        "boost", " ", "your", " ", "preparation", " ", "and", " ", "secure", " ", "your", " ",
-        "place", " ", "in", " ", "2024", ".", "\n", "\n", "Enjoy", " ", "and", " ", "guarantee",
-        " ", "your", " ", "subscription", "!"
-    );
-  }
 
   /**
    * Generate word.
@@ -39,12 +22,45 @@ public class ProvisionalGptChatApi {
       WordType wordType
   ) {
     // send request to GPT chat to create fields for the word
+    // consider word type PROPER_NAME
     Word newWord = new Word();
     newWord.setWord(word);
     newWord.setMeaning("Meaning of the word");
     newWord.setType(wordType);
-    newWord.setExampleSentence(List.of("List with as example sentence"));
+    // newWord.setExampleSentence(List.of("List with as example sentence"));
     return newWord;
+  }
+
+  /**
+   * Gets word text sentences.
+   *
+   * @param word the word
+   * @return the word text sentences
+   */
+  public static List<String> getWordTextSentences(String word) {
+    List<String> sentences = new ArrayList<>();
+    sentences.add("Sentence number one for " + word);
+    sentences.add("Sentence number two for " + word);
+    sentences.add("Sentence number three for " + word);
+    sentences.add("Sentence number four for " + word);
+    sentences.add("Sentence number five for " + word);
+    return sentences;
+  }
+
+  /**
+   * Gets sentences translations.
+   *
+   * @param textSentences the text sentences
+   * @return the sentences translations
+   */
+  public static List<String> getSentencesTranslations(List<String> textSentences) {
+    List<String> translations = new ArrayList<>();
+    translations.add("Translation number one");
+    translations.add("Translation number two");
+    translations.add("Translation number three");
+    translations.add("Translation number four");
+    translations.add("Translation number five");
+    return translations;
   }
 
 }

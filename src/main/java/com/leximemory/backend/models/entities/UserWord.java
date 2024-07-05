@@ -32,13 +32,9 @@ public class UserWord {
 
   @EmbeddedId
   private UserWordId id;
-  @Column(name = "registration_date")
   private LocalDateTime registrationDate;
-  @Column(name = "last_revision_date")
   private LocalDateTime lastRevisionDate;
-  @Column(name = "reviews_count")
   private Integer reviewsCount;
-  @Column(name = "difficulty_level")
   private DifficultyLevel difficultyLevel;
   private Temperature temperature;
 
@@ -55,6 +51,6 @@ public class UserWord {
   @OneToOne(mappedBy = "userWord")
   private FlashCard flashCard;
 
-  @ManyToMany(mappedBy = "content")
-  List<UserText> userTexts;
+  @ManyToMany(mappedBy = "sentence")
+  List<Sentence> sentences;
 }
