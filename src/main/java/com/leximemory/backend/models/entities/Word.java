@@ -1,5 +1,6 @@
 package com.leximemory.backend.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.leximemory.backend.models.enums.WordType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -41,16 +42,20 @@ public class Word {
   private Integer repetitions;
 
   @OneToMany(mappedBy = "word", fetch = FetchType.LAZY)
+  @JsonIgnore
   @EqualsAndHashCode.Exclude
   private List<Sentence> exempleSentences;
 
   @OneToMany(mappedBy = "word", fetch = FetchType.LAZY)
+  @JsonIgnore
   private List<Question> questions;
 
   @OneToMany(mappedBy = "word", fetch = FetchType.LAZY)
+  @JsonIgnore
   private List<UserWord> userWords;
 
   @OneToOne(mappedBy = "word")
+  @JsonIgnore
   private Audio audio;
 
 }

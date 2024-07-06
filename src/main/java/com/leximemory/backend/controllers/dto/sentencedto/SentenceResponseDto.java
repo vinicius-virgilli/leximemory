@@ -12,8 +12,7 @@ public record SentenceResponseDto(
     Integer id,
     String textSentence,
     String translation,
-    List<UserWordId> sentence,
-    byte[] audio
+    List<UserWordId> sentence
 ) {
 
   /**
@@ -29,8 +28,7 @@ public record SentenceResponseDto(
         sentence.getTranslation(),
         sentence.getSentence().stream().map(
             UserWord::getId
-        ).toList(),
-        sentence.getAudio().getAudio()
+        ).toList()
     );
   }
 }

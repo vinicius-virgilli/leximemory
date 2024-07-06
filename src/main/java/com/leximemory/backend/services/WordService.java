@@ -58,14 +58,14 @@ public class WordService {
    */
   @Transactional
   public Word createWord(WordCreationDto wordCreationDto) {
-    try {
-      getWordByWord(wordCreationDto.word());
+    List<Word> words = wordRepository.findAll();
+    List<String> wordWords = words.stream().map(Word::getWord).toList();
+
+    if (wordWords.contains(wordCreationDto.word())) {
       throw new WordAlreadyExistsException();
-    } catch (WordNotFoundException e) {
-      // do nothing
     }
 
-    Word existingWord = wordRepository.findAll().stream()
+    Word existingWord = words.stream()
         .filter(w -> w.getWord() != null && w.getWord().equalsIgnoreCase(wordCreationDto.word()))
         .findFirst()
         .orElse(null);

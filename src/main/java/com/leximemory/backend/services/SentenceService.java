@@ -120,18 +120,13 @@ public class SentenceService {
 
     Sentence newSentence = createSentence(user, userWords, strings);
 
+    newSentence.setTextSentence(TextHandler.buildSentence(newSentence.getSentence()));
     newSentence.setWord(word);
     newSentence.setTranslation(translation);
 
-    Sentence salvedSentence = sentenceRepository.save(newSentence);
-
-    Audio audio = new Audio();
-    audio.setSentence(salvedSentence);
-    Audio salvedAudio = audioRepository.save(audio);
-    newSentence.setAudio(audio);
-
-    return sentenceRepository.save(salvedSentence);
+    return sentenceRepository.save(newSentence);
   }
+
 
   /**
    * Create sentence.

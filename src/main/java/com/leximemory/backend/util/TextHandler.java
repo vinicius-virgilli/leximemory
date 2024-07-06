@@ -89,6 +89,12 @@ public class TextHandler {
    */
   public static Integer countNewValidWords(
       List<UserWord> userWords, List<String> strings) {
+    List<String> validWords = filterValidWords(strings);
+
+    if (userWords.isEmpty()) {
+      return validWords.size();
+    }
+
     int newValidWords = 0;
 
     List<String> words = new ArrayList<>();
@@ -97,8 +103,8 @@ public class TextHandler {
           .map(w -> w.getWord().getWord().toLowerCase()).toList();
     }
 
-    for (String str : strings) {
-      if (!words.contains(str.toLowerCase())) {
+    for (String validWord : validWords) {
+      if (!words.contains(validWord.toLowerCase())) {
         newValidWords += 1;
       }
     }
@@ -143,7 +149,7 @@ public class TextHandler {
   public static String buildSentence(List<UserWord> userWords) {
     return userWords.stream()
         .map(userWord -> userWord.getWord().getWord())
-        .collect(Collectors.joining(" "));
+        .collect(Collectors.joining(""));
   }
 
   /**

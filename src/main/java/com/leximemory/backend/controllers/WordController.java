@@ -1,7 +1,7 @@
 package com.leximemory.backend.controllers;
 
 import com.leximemory.backend.controllers.dto.questiondto.QuestionDto;
-import com.leximemory.backend.controllers.dto.worddto.CompleteWordDto;
+import com.leximemory.backend.controllers.dto.worddto.WordWithSentencesDto;
 import com.leximemory.backend.controllers.dto.worddto.WordCreationDto;
 import com.leximemory.backend.controllers.dto.worddto.WordDto;
 import com.leximemory.backend.controllers.dto.worddto.WordResponseDto;
@@ -11,6 +11,8 @@ import com.leximemory.backend.services.QuestionService;
 import com.leximemory.backend.services.WordService;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+
 /**
  * The type Word controller.
  */
@@ -32,6 +35,8 @@ public class WordController {
 
   private final WordService wordService;
   private final QuestionService questionService;
+  private static final Logger logger = LoggerFactory.getLogger(WordController.class);
+
 
   /**
    * Instantiates a new Word controller.
@@ -49,7 +54,7 @@ public class WordController {
   }
 
   /**
-   * Create word word response dto.
+   * Create word response dto.
    *
    * @param wordCreationDto the word creation dto
    * @return the word response dto
@@ -57,7 +62,13 @@ public class WordController {
   @PostMapping("/words")
   @ResponseStatus(HttpStatus.CREATED)
   public WordResponseDto createWord(@RequestBody WordCreationDto wordCreationDto) {
+
+    logger.info("Received POST request to create a word. Body: " + wordCreationDto);
+
     Word newWord = wordService.createWord(wordCreationDto);
+
+    System.out.println("Created word successfully. Word: " + newWord);
+
     return WordResponseDto.fromEntity(newWord);
   }
 
@@ -147,12 +158,12 @@ public class WordController {
    */
   @PutMapping("users/{userId}/words/{wordId}/sentences")
   @ResponseStatus(HttpStatus.OK)
-  public CompleteWordDto createExampleSentences(
+  public WordWithSentencesDto createExampleSentences(
       @PathVariable("userId") Integer userId,
       @PathVariable("wordId") Integer wordId,
       @RequestBody WordCreationDto wordCreationDto
   ) {
     Word word = wordService.createWordExampleSentences(userId, wordId, wordCreationDto);
-    return CompleteWordDto.fromEntity(word);
+    return WordWithSentencesDto.fromEntity(word);
   }
 }

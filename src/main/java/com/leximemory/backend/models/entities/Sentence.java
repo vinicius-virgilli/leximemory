@@ -1,5 +1,6 @@
 package com.leximemory.backend.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +29,7 @@ public class Sentence {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonIgnore
   private Integer id;
   private String textSentence;
   private String translation;
@@ -41,17 +43,20 @@ public class Sentence {
           @JoinColumn(name = "word_id", referencedColumnName = "word_id")
       }
   )
+  @JsonIgnore
   private List<UserWord> sentence;
 
   @ManyToOne
   @JoinColumn(name = "word_id")
+  @JsonIgnore
   private Word word;
 
   @ManyToOne
   @JoinColumn(name = "user_text_id")
+  @JsonIgnore
   private UserText userText;
 
   @OneToOne(mappedBy = "sentence")
+  @JsonIgnore
   private Audio audio;
-
 }
