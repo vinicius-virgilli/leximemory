@@ -9,6 +9,7 @@ import java.util.List;
  */
 public record SentenceDto(
     Integer id,
+    Integer tatoebaAudioId,
     List<UserWordTextDto> sentence
 ) {
 
@@ -30,6 +31,7 @@ public record SentenceDto(
   public static SentenceDto fromEntity(Sentence sentence) {
     return new SentenceDto(
         sentence.getId(),
+        sentence.getTatoebaAudioId(),
         sentence.getSentence().stream().map(UserWordTextDto::fromEntity).toList()
     );
   }

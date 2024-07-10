@@ -1,30 +1,19 @@
 package com.leximemory.backend.services;
 
-import com.leximemory.backend.controllers.dto.userworddto.UserWordDto;
 import com.leximemory.backend.controllers.dto.worddto.WordCreationDto;
-import com.leximemory.backend.models.entities.Audio;
 import com.leximemory.backend.models.entities.Sentence;
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.entities.UserText;
 import com.leximemory.backend.models.entities.UserWord;
 import com.leximemory.backend.models.entities.Word;
-import com.leximemory.backend.models.entities.id.UserWordId;
-import com.leximemory.backend.models.enums.DifficultyLevel;
-import com.leximemory.backend.models.enums.Temperature;
-import com.leximemory.backend.models.enums.WordType;
-import com.leximemory.backend.models.repositories.AudioRepository;
 import com.leximemory.backend.models.repositories.SentenceRepository;
-import com.leximemory.backend.models.repositories.UserWordRepository;
-import com.leximemory.backend.services.exception.wordexceptions.WordNotFoundException;
 import com.leximemory.backend.util.TextHandler;
 import jakarta.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.services.polly.endpoints.internal.Value.Int;
 
 /**
  * The type Sentence service.
@@ -34,9 +23,7 @@ public class SentenceService {
 
   private final SentenceRepository sentenceRepository;
   private final UserWordService userWordService;
-  private final UserWordRepository userWordRepository;
   private final WordService wordService;
-  private final AudioRepository audioRepository;
 
 
   /**
@@ -44,25 +31,17 @@ public class SentenceService {
    *
    * @param sentenceRepository the sentence repository
    * @param userWordService    the user word service
-   * @param userWordRepository the user word repository
    * @param wordService        the word service
-   * @param userService        the user service
-   * @param audioRepository    the audio repository
    */
   @Autowired
   public SentenceService(
       SentenceRepository sentenceRepository,
       UserWordService userWordService,
-      UserWordRepository userWordRepository,
-      WordService wordService,
-      UserService userService,
-      AudioRepository audioRepository
+      WordService wordService
   ) {
     this.sentenceRepository = sentenceRepository;
     this.userWordService = userWordService;
     this.wordService = wordService;
-    this.userWordRepository = userWordRepository;
-    this.audioRepository = audioRepository;
   }
 
   /**
@@ -104,17 +83,20 @@ public class SentenceService {
   /**
    * Create word sentence sentence.
    *
-   * @param user        the user
-   * @param word        the word
-   * @param strings     the strings
-   * @param translation the translation
+   * @param user           the user
+   * @param word           the word
+   * @param strings        the strings
+   * @param translation    the translation
+   * @param tatoebaAudioId the tatoeba audio id
    * @return the sentence
    */
+  @Transactional
   public Sentence createWordSentence(
       User user,
       Word word,
       List<String> strings,
-      String translation
+      String translation,
+      Integer tatoebaAudioId
   ) {
     List<UserWord> userWords = userWordService.getAllUserWords(user.getId());
 
@@ -123,6 +105,7 @@ public class SentenceService {
     newSentence.setTextSentence(TextHandler.buildSentence(newSentence.getSentence()));
     newSentence.setWord(word);
     newSentence.setTranslation(translation);
+    newSentence.setTatoebaAudioId(tatoebaAudioId);
 
     return sentenceRepository.save(newSentence);
   }
@@ -145,12 +128,12 @@ public class SentenceService {
     Sentence newSentence = new Sentence();
     newSentence.setSentence(new ArrayList<>());
 
-    for (String str : strings) {
-      List<String> userWordsWord = new ArrayList<>();
+    List<Word> words = new ArrayList<>();
+    List<String> userWordsWord = new ArrayList<>();
+    userWords.forEach(
+        userWord -> userWordsWord.add(userWord.getWord().getWord()));
 
-      if (!userWords.isEmpty()) {
-        userWordsWord = userWords.stream().map(uw -> uw.getWord().getWord()).toList();
-      }
+    for (String str : strings) {
 
       if (userWordsWord.contains(str)) {
 
@@ -163,16 +146,18 @@ public class SentenceService {
         }
 
       } else {
-        UserWord newUserWord = createWordAndUserWord(
-            user, str);
+        if (words.isEmpty()) {
+          words = wordService.getAllWords();
+        }
+
+        UserWord newUserWord = createUserWord(str, words, user);
+
         newSentence.getSentence().add(newUserWord);
 
-        if (newUserWord.getSentences() == null) {
-          newUserWord.setSentences(new ArrayList<>());
-        }
         newUserWord.getSentences().add(newSentence);
 
         userWords.add(newUserWord);
+        userWordsWord.add(newUserWord.getWord().getWord());
       }
     }
 
@@ -180,42 +165,58 @@ public class SentenceService {
   }
 
   /**
-   * Create word and user word.
+   * Create user word.
    *
-   * @param user   the user
    * @param string the string
+   * @param words  the words
+   * @param user   the user
    * @return the user word
    */
-  @Transactional
-  public UserWord createWordAndUserWord(
-      User user,
-      String string
+  public UserWord createUserWord(
+      String string,
+      List<Word> words,
+      User user
   ) {
+    Word salvedWord = findOrCreateWord(string, words);
+
+    return userWordService.createUserWord(user, salvedWord);
+  }
+
+  /**
+   * Create word.
+   *
+   * @param string the string
+   * @param words  the words
+   * @return the word
+   */
+  public Word findOrCreateWord(
+      String string,
+      List<Word> words
+  ) {
+    List<String> wordWords = words.stream()
+        .map(Word::getWord).toList();
+
+    if (wordWords.contains(string)) {
+      Optional<Word> optionalWord =
+          words.stream().filter(word -> word.getWord().equals(string)).findFirst();
+
+      if (optionalWord.isPresent()) {
+        return optionalWord.get();
+      }
+    }
+
     Word salvedWord = wordService.createWord(
         new WordCreationDto(
             string,
             null,
-            null,
-            new ArrayList<>(),
-            new ArrayList<>())
+            null
+        ),
+        words
     );
 
-    UserWordId userWordId = new UserWordId(user.getId(), salvedWord.getId());
+    words.add(salvedWord);
 
-    UserWord newUserWord = new UserWordDto(
-        userWordId,
-        salvedWord.getWord(),
-        LocalDateTime.now(),
-        LocalDateTime.now(),
-        0,
-        DifficultyLevel.MEDIUM,
-        Temperature.SEVEN
-    ).toEntity(userWordId);
-
-    newUserWord.setUser(user);
-    newUserWord.setWord(salvedWord);
-
-    return userWordRepository.save(newUserWord);
+    return salvedWord;
   }
 }
 

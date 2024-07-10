@@ -42,8 +42,8 @@ public class Word {
   private Integer repetitions;
 
   @OneToMany(mappedBy = "word", fetch = FetchType.LAZY)
-  @JsonIgnore
   @EqualsAndHashCode.Exclude
+  @JsonIgnore
   private List<Sentence> exempleSentences;
 
   @OneToMany(mappedBy = "word", fetch = FetchType.LAZY)

@@ -1,10 +1,11 @@
 package com.leximemory.backend.controllers;
 
 import com.leximemory.backend.controllers.dto.questiondto.QuestionDto;
-import com.leximemory.backend.controllers.dto.worddto.WordWithSentencesDto;
+import com.leximemory.backend.controllers.dto.sentencedto.SentenceCreationDto;
 import com.leximemory.backend.controllers.dto.worddto.WordCreationDto;
 import com.leximemory.backend.controllers.dto.worddto.WordDto;
 import com.leximemory.backend.controllers.dto.worddto.WordResponseDto;
+import com.leximemory.backend.controllers.dto.worddto.WordWithSentencesDto;
 import com.leximemory.backend.models.entities.Question;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.services.QuestionService;
@@ -151,9 +152,9 @@ public class WordController {
   /**
    * Create example sentences word response dto.
    *
-   * @param userId          the user id
-   * @param wordId          the word id
-   * @param wordCreationDto the word creation dto
+   * @param userId              the user id
+   * @param wordId              the word id
+   * @param sentenceCreationDto the sentence creation dto
    * @return the word response dto
    */
   @PutMapping("users/{userId}/words/{wordId}/sentences")
@@ -161,9 +162,9 @@ public class WordController {
   public WordWithSentencesDto createExampleSentences(
       @PathVariable("userId") Integer userId,
       @PathVariable("wordId") Integer wordId,
-      @RequestBody WordCreationDto wordCreationDto
+      @RequestBody SentenceCreationDto sentenceCreationDto
   ) {
-    Word word = wordService.createWordExampleSentences(userId, wordId, wordCreationDto);
+    Word word = wordService.createWordExampleSentences(userId, wordId, sentenceCreationDto);
     return WordWithSentencesDto.fromEntity(word);
   }
 }

@@ -33,6 +33,7 @@ public class Sentence {
   private Integer id;
   private String textSentence;
   private String translation;
+  private Integer tatoebaAudioId;
 
   @ManyToMany
   @JoinTable(
@@ -59,4 +60,5 @@ public class Sentence {
   @OneToOne(mappedBy = "sentence")
   @JsonIgnore
   private Audio audio;
+
 }

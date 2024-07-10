@@ -1,5 +1,6 @@
 package com.leximemory.backend.services;
 
+import com.leximemory.backend.controllers.dto.sentencedto.SentenceCreationDto;
 import com.leximemory.backend.controllers.dto.worddto.WordCreationDto;
 import com.leximemory.backend.models.entities.Audio;
 import com.leximemory.backend.models.entities.Sentence;
@@ -53,12 +54,26 @@ public class WordService {
   /**
    * Create word.
    *
-   * @param wordCreationDto the word
+   * @param wordCreationDto the word creation dto
+   * @return the word
+   */
+  public Word createWord(WordCreationDto wordCreationDto) {
+    List<Word> words = wordRepository.findAll();
+    return createWord(wordCreationDto, words);
+  }
+
+  /**
+   * Create word.
+   *
+   * @param wordCreationDto the wor
+   * @param words           the words
    * @return the word
    */
   @Transactional
-  public Word createWord(WordCreationDto wordCreationDto) {
-    List<Word> words = wordRepository.findAll();
+  public Word createWord(
+      WordCreationDto wordCreationDto,
+      List<Word> words
+  ) {
     List<String> wordWords = words.stream().map(Word::getWord).toList();
 
     if (wordWords.contains(wordCreationDto.word())) {
@@ -90,7 +105,7 @@ public class WordService {
     } else {
       newWord.setType(TextHandler.getWordType(wordCreationDto.word()));
       newWord.setWordRank(wordCreationDto.rank() != null ? wordCreationDto.rank()
-          : wordRepository.findAll().size() + 1);
+          : words.size() + 1);
       newWord.setRepetitions(
           wordCreationDto.repetitions() != null ? wordCreationDto.repetitions() : 0);
       newWord.setExempleSentences(new ArrayList<>());
@@ -108,28 +123,28 @@ public class WordService {
   /**
    * Create word example sentences word.
    *
-   * @param userId          the user id
-   * @param wordId          the word id
-   * @param wordCreationDto the word creation dto
+   * @param userId              the user id
+   * @param wordId              the word id
+   * @param sentenceCreationDto the word creation dto
    * @return the word
    */
   public Word createWordExampleSentences(
       Integer userId,
       Integer wordId,
-      WordCreationDto wordCreationDto
+      SentenceCreationDto sentenceCreationDto
   ) {
     User user = userService.getUserById(userId);
     Word word = getWordById(wordId);
     List<Sentence> exampleSentences = new ArrayList<>();
 
-    for (int i = 0; i < wordCreationDto.sentences().size(); i++) {
+    for (int i = 0; i < sentenceCreationDto.sentences().size(); i++) {
 
       List<String> textSentence = TextHandler.splitTextIntoWords(
-          wordCreationDto.sentences().get(i));
-      String translation = wordCreationDto.translations().get(i);
+          sentenceCreationDto.sentences().get(i));
+      String translation = sentenceCreationDto.translations().get(i);
 
       exampleSentences.add(sentenceService.createWordSentence(
-          user, word, textSentence, translation));
+          user, word, textSentence, translation, sentenceCreationDto.tatoebaAudioId()));
     }
 
     word.setExempleSentences(exampleSentences);

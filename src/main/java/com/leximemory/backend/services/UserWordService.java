@@ -9,6 +9,7 @@ import com.leximemory.backend.services.exception.flashcardexceptions.FlashCardAl
 import com.leximemory.backend.services.exception.userwordexceptions.UserWordNotFoundException;
 import com.leximemory.backend.util.Calculator;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,25 +73,62 @@ public class UserWordService {
       getUserWordById(userWord.getId());
       throw new UserWordAlreadyExistsException();
     } catch (UserWordNotFoundException e) {
-      User user = userService.getUserById(userWord.getId().getUserId());
-      Word word = wordService.getWordById(userWord.getId().getWordId());
-      userWord.setUser(user);
-      userWord.setWord(word);
-
-      if (userWord.getRegistrationDate() == null) {
-        userWord.setRegistrationDate(LocalDateTime.now());
-      }
-      if (userWord.getLastRevisionDate() == null) {
-        userWord.setLastRevisionDate(LocalDateTime.now());
-      }
-      if (userWord.getTemperature() == null) {
-        userWord.setTemperature(Calculator.getTemp(userWord));
-      }
-      if (userWord.getReviewsCount() == null) {
-        userWord.setReviewsCount(0);
-      }
-
-      return userWordRepository.save(userWord);
+      // Do nothing
     }
+
+    User user = userService.getUserById(userWord.getId().getUserId());
+    Word word = wordService.getWordById(userWord.getId().getWordId());
+    userWord.setUser(user);
+    userWord.setWord(word);
+
+    return saveUserWord(userWord);
+  }
+
+  /**
+   * Create user word.
+   *
+   * @param user the user
+   * @param word the word
+   * @return the user word
+   */
+  public UserWord createUserWord(
+      User user,
+      Word word
+  ) {
+    UserWord userWord = new UserWord();
+
+    UserWordId userWordId = new UserWordId(user.getId(), word.getId());
+
+    userWord.setId(userWordId);
+    userWord.setUser(user);
+    userWord.setWord(word);
+
+    return saveUserWord(userWord);
+  }
+
+  /**
+   * Save user word.
+   *
+   * @param userWord the user word
+   * @return the user word
+   */
+  public UserWord saveUserWord(UserWord userWord) {
+    if (userWord.getRegistrationDate() == null) {
+      userWord.setRegistrationDate(LocalDateTime.now());
+    }
+    if (userWord.getLastRevisionDate() == null) {
+      userWord.setLastRevisionDate(LocalDateTime.now());
+    }
+    if (userWord.getTemperature() == null) {
+      userWord.setTemperature(Calculator.getTemp(userWord));
+    }
+    if (userWord.getReviewsCount() == null) {
+      userWord.setReviewsCount(0);
+    }
+    if (userWord.getSentences() == null) {
+      userWord.setSentences(new ArrayList<>());
+    }
+
+    return userWordRepository.save(userWord);
   }
 }

@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -27,8 +25,8 @@ public class WordHandler {
   private static final String FILE_PATH =
       WordHandler.class.getResource("/words/ranked_words.json").getFile();
   private static final String API_URL = "http://localhost:8080/words";
-  private static final int BATCH_SIZE = 100;
   private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors();
+  private static final int START_INDEX = 13500; // Starting index for processing
 
   /**
    * The entry point of application.
@@ -44,48 +42,34 @@ public class WordHandler {
 
       if (rootNode.isArray()) {
         int totalWords = rootNode.size();
-        int processedWords = 0;
-
         ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
-        while (processedWords < totalWords) {
-          int batchStart = processedWords;
-          int batchEnd = Math.min(processedWords + BATCH_SIZE, totalWords);
+
+        for (int i = START_INDEX; i < totalWords; i++) {
+          final int index = i; // Final variable for lambda expression
 
           executorService.submit(() -> {
-            for (int i = batchStart; i < batchEnd; i++) {
-              JsonNode wordNode = rootNode.get(i);
-              JsonNode exampleSentencesNode = wordNode.path("exemplo_sentences");
+            JsonNode wordNode = rootNode.get(index);
+            String word = wordNode.path("word").asText();
+            int rank = wordNode.path("rank").asInt();
+            int repetitions = wordNode.path("repeat").asInt();
 
-              if (exampleSentencesNode.isArray()) {
-                List<String> requestBodies = new ArrayList<>();
-                for (JsonNode sentenceNode : exampleSentencesNode) {
-                  String requestBody = String.format(
-                      "{\"word\": \"%s\", \"rank\": %d, \"repetitions\": %d}",
-                      wordNode.path("word").asText(),
-                      wordNode.path("rank").asInt(),
-                      wordNode.path("repeat").asInt()
-                  );
-                  requestBodies.add(requestBody);
-                }
-                sendPostRequests(requestBodies);
-              } else {
-                System.out.println("Example sentences node is not an array");
-              }
-            }
+            sendPostRequest(word, rank, repetitions);
+
+            double progress = (double) (index - START_INDEX + 1) / (totalWords - START_INDEX) * 100;
+            Instant currentTime = Instant.now();
+            Duration elapsedTime = Duration.between(startTime, currentTime);
+            double estimatedTimeRemainingSeconds =
+                ((totalWords - index) * elapsedTime.toMillis()) / ((index - START_INDEX + 1)
+                    * 1000.0);
+            double estimatedTimeRemainingMinutes = estimatedTimeRemainingSeconds / 60.0;
+            int hours = (int) Math.floor(estimatedTimeRemainingMinutes / 60.0);
+            int minutes = (int) Math.round(estimatedTimeRemainingMinutes % 60.0);
+            System.out.printf("Progress: %.2f%% - Estimated time remaining: %dh%02d min\n",
+                progress,
+                hours, minutes);
           });
-
-          processedWords += BATCH_SIZE;
-          double progress = (double) processedWords / totalWords * 100;
-          Instant currentTime = Instant.now();
-          Duration elapsedTime = Duration.between(startTime, currentTime);
-          double estimatedTimeRemainingSeconds =
-              ((totalWords - processedWords) * elapsedTime.toMillis()) / (processedWords * 1000.0);
-          double estimatedTimeRemainingMinutes = estimatedTimeRemainingSeconds / 60.0;
-          int hours = (int) Math.floor(estimatedTimeRemainingMinutes / 60.0);
-          int minutes = (int) Math.round(estimatedTimeRemainingMinutes % 60.0);
-          System.out.printf("Progress: %.2f%% - Estimated time remaining: %dh%02d min\n", progress,
-              hours, minutes);
         }
+
         executorService.shutdown();
         executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
       } else {
@@ -96,21 +80,26 @@ public class WordHandler {
     }
   }
 
-  private static void sendPostRequests(List<String> requestBodies) {
-    try {
-      try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-        for (String requestBody : requestBodies) {
-          HttpPost httpPost = new HttpPost(API_URL);
-          httpPost.setEntity(new StringEntity(requestBody, StandardCharsets.UTF_8));
-          httpPost.setHeader("Content-Type", "application/json");
+  private static void sendPostRequest(String word, int rank, int repetitions) {
+    try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+      HttpPost httpPost = new HttpPost(API_URL);
+      String requestBody = buildRequestBody(word, rank, repetitions);
+      httpPost.setEntity(new StringEntity(requestBody, StandardCharsets.UTF_8));
+      httpPost.setHeader("Content-Type", "application/json");
 
-          try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-            // do nothing
-          }
-        }
+      try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+        int statusCode = response.getCode();
+        System.out.printf("Response status: %d | word: \"%s\" | ranking: %d\n", statusCode, word,
+            rank);
+        // Optionally, handle response content or log here
       }
     } catch (IOException e) {
       throw new WordIoException();
     }
+  }
+
+  private static String buildRequestBody(String word, int rank, int repetitions) {
+    return String.format("{\"word\": \"%s\", \"rank\": %d, \"repetitions\": %d}", word, rank,
+        repetitions);
   }
 }
