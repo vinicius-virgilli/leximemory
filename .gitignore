@@ -38,5 +38,5 @@ build/
 ### keys ###
 .env
 
-### db backup files ###
+### db mysql image files ###
 *.tar
