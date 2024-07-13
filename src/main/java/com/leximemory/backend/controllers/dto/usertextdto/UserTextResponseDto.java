@@ -1,6 +1,6 @@
 package com.leximemory.backend.controllers.dto.usertextdto;
 
-import com.leximemory.backend.controllers.dto.sentencedto.SentenceDto;
+import com.leximemory.backend.controllers.dto.sentencedto.WordSentenceDto;
 import com.leximemory.backend.models.entities.UserText;
 import com.leximemory.backend.models.enums.DifficultyLevel;
 import com.leximemory.backend.models.enums.SubjectsInterests;
@@ -16,7 +16,7 @@ public record UserTextResponseDto(
     DifficultyLevel difficultyLevel,
     SubjectsInterests subject,
     String title,
-    List<SentenceDto> sentenceDtos
+    List<WordSentenceDto> sentenceDtos
 ) {
 
   /**
@@ -33,7 +33,7 @@ public record UserTextResponseDto(
         userText.getDifficultyLevel(),
         userText.getSubject(),
         userText.getTitle(),
-        userText.getSentences().stream().map(SentenceDto::fromEntity).toList()
+        userText.getSentences().stream().map(WordSentenceDto::fromEntity).toList()
     );
   }
 
@@ -53,7 +53,7 @@ public record UserTextResponseDto(
         userText.getSubject(),
         userText.getTitle(),
         userText.getSentences().stream().map(
-            SentenceDto::fromEntity
+            WordSentenceDto::fromEntity
         ).toList()
     );
   }

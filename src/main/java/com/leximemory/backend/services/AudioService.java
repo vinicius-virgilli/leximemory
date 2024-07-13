@@ -8,6 +8,7 @@ import com.leximemory.backend.models.repositories.AudioRepository;
 import com.leximemory.backend.services.exception.sentenceexception.SentenceNotFoundException;
 import com.leximemory.backend.util.AudioHandler;
 import com.leximemory.backend.util.TextHandler;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,35 @@ public class AudioService {
     AudioHandler.saveMp3(audio.getAudio());
 
     return audioRepository.save(audio);
+  }
+
+  /**
+   * Create initial word audio audio.
+   *
+   * @param word the word
+   * @return the audio
+   */
+  @Transactional
+  public Audio createInitialWordAudio(Word word) {
+    Audio audio = new Audio();
+    audio.setWord(word);
+    audio.setAudio(null);
+
+    return audioRepository.save(audio);
+  }
+
+  /**
+   * Create audio copy audio.
+   *
+   * @param audio the audio
+   * @return the audio
+   */
+  public Audio createAudioCopy(Audio audio, Word word) {
+    Audio newAudio = new Audio();
+    audio.setWord(word);
+    audio.setAudio(audio.getAudio());
+
+    return audioRepository.save(newAudio);
   }
 
   /**

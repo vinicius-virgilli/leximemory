@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +28,7 @@ public class WordHandler {
       WordHandler.class.getResource("/words/ranked_words.json").getFile();
   private static final String API_URL = "http://localhost:8080/words";
   private static final int NUM_THREADS = Runtime.getRuntime().availableProcessors();
-  private static final int START_INDEX = 13500; // Starting index for processing
+  private static final int START_INDEX = 0; // Starting index for processing
 
   /**
    * The entry point of application.
@@ -81,6 +83,7 @@ public class WordHandler {
   }
 
   private static void sendPostRequest(String word, int rank, int repetitions) {
+
     try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
       HttpPost httpPost = new HttpPost(API_URL);
       String requestBody = buildRequestBody(word, rank, repetitions);
@@ -99,7 +102,10 @@ public class WordHandler {
   }
 
   private static String buildRequestBody(String word, int rank, int repetitions) {
-    return String.format("{\"word\": \"%s\", \"rank\": %d, \"repetitions\": %d}", word, rank,
-        repetitions);
+
+    return String.format(
+        "{\"word\": \"%s\", \"rank\": %d, \"repetitions\": %d}",
+        word, rank, repetitions
+    );
   }
 }

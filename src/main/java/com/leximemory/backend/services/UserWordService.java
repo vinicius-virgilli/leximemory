@@ -11,6 +11,7 @@ import com.leximemory.backend.util.Calculator;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -130,5 +131,16 @@ public class UserWordService {
     }
 
     return userWordRepository.save(userWord);
+  }
+
+  /**
+   * Find by user and word optional.
+   *
+   * @param user the user
+   * @param word the word
+   * @return the optional
+   */
+  public List<UserWord> findByUserAndWordWord(User user, String word) {
+    return userWordRepository.findByUserAndWordWord(user, word);
   }
 }

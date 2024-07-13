@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,7 +55,8 @@ public class Word {
   @JsonIgnore
   private List<UserWord> userWords;
 
-  @OneToOne(mappedBy = "word")
+  @OneToOne(mappedBy = "word", fetch = FetchType.LAZY)
+  @EqualsAndHashCode.Exclude
   @JsonIgnore
   private Audio audio;
 

@@ -2,18 +2,22 @@ package com.leximemory.backend.controllers;
 
 import com.leximemory.backend.controllers.dto.questiondto.QuestionDto;
 import com.leximemory.backend.controllers.dto.sentencedto.SentenceCreationDto;
+import com.leximemory.backend.controllers.dto.sentencedto.SentencesCreationDto;
+import com.leximemory.backend.controllers.dto.sentencedto.WordSentenceDto;
+import com.leximemory.backend.controllers.dto.sentencedto.WordSentencesDto;
+import com.leximemory.backend.controllers.dto.worddto.WordCompleteDto;
 import com.leximemory.backend.controllers.dto.worddto.WordCreationDto;
 import com.leximemory.backend.controllers.dto.worddto.WordDto;
 import com.leximemory.backend.controllers.dto.worddto.WordResponseDto;
 import com.leximemory.backend.controllers.dto.worddto.WordWithSentencesDto;
 import com.leximemory.backend.models.entities.Question;
+import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.services.QuestionService;
+import com.leximemory.backend.services.UserService;
 import com.leximemory.backend.services.WordService;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +40,6 @@ public class WordController {
 
   private final WordService wordService;
   private final QuestionService questionService;
-  private static final Logger logger = LoggerFactory.getLogger(WordController.class);
 
 
   /**
@@ -55,6 +58,22 @@ public class WordController {
   }
 
   /**
+   * Create complete word complete dto.
+   *
+   * @param wordCompleteDto the word complete dto
+   * @return the word complete dto
+   */
+  @PostMapping("/words/complete")
+  @ResponseStatus(HttpStatus.CREATED)
+  public WordCompleteDto createCompleteWord(
+      @RequestBody WordCompleteDto wordCompleteDto
+  ) {
+
+    Word newWord = wordService.createCompleteWord(wordCompleteDto);
+    return WordCompleteDto.fromEntity(newWord);
+  }
+
+  /**
    * Create word response dto.
    *
    * @param wordCreationDto the word creation dto
@@ -64,11 +83,7 @@ public class WordController {
   @ResponseStatus(HttpStatus.CREATED)
   public WordResponseDto createWord(@RequestBody WordCreationDto wordCreationDto) {
 
-    logger.info("Received POST request to create a word. Body: " + wordCreationDto);
-
     Word newWord = wordService.createWord(wordCreationDto);
-
-    System.out.println("Created word successfully. Word: " + newWord);
 
     return WordResponseDto.fromEntity(newWord);
   }
@@ -93,8 +108,8 @@ public class WordController {
    */
   @GetMapping("/words/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public WordDto getWordById(@PathVariable Integer id) {
-    return WordDto.fromEntity(wordService.getWordById(id));
+  public WordCompleteDto getWordById(@PathVariable Integer id) {
+    return WordCompleteDto.fromEntity(wordService.getWordById(id));
   }
 
   /**
@@ -142,29 +157,29 @@ public class WordController {
    */
   @GetMapping("/words/search")
   @ResponseStatus(HttpStatus.OK)
-  public WordDto searchWord(
+  public WordCompleteDto searchWord(
       @RequestParam("word") String string
   ) {
     Word word = wordService.getWordByWord(string);
-    return WordDto.fromEntity(word);
+    return WordCompleteDto.fromEntity(word);
   }
 
   /**
    * Create example sentences word response dto.
    *
-   * @param userId              the user id
-   * @param wordId              the word id
-   * @param sentenceCreationDto the sentence creation dto
+   * @param userId           the user id
+   * @param wordId           the word id
+   * @param wordSentencesDto the word sentences dto
    * @return the word response dto
    */
   @PutMapping("users/{userId}/words/{wordId}/sentences")
   @ResponseStatus(HttpStatus.OK)
-  public WordWithSentencesDto createExampleSentences(
+  public WordCompleteDto createExampleSentences(
       @PathVariable("userId") Integer userId,
       @PathVariable("wordId") Integer wordId,
-      @RequestBody SentenceCreationDto sentenceCreationDto
+      @RequestBody WordSentencesDto wordSentencesDto
   ) {
-    Word word = wordService.createWordExampleSentences(userId, wordId, sentenceCreationDto);
-    return WordWithSentencesDto.fromEntity(word);
+    Word word = wordService.createWordExampleSentences(userId, wordId, wordSentencesDto);
+    return WordCompleteDto.fromEntity(word);
   }
 }
