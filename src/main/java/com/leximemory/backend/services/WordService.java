@@ -1,7 +1,9 @@
 package com.leximemory.backend.services;
 
+import com.leximemory.backend.controllers.dto.sentencedto.WordSentenceDto;
+import com.leximemory.backend.controllers.dto.sentencedto.WordSentencesDto;
+import com.leximemory.backend.controllers.dto.worddto.WordCompleteDto;
 import com.leximemory.backend.controllers.dto.worddto.WordCreationDto;
-import com.leximemory.backend.models.entities.Audio;
 import com.leximemory.backend.models.entities.Sentence;
 import com.leximemory.backend.models.entities.User;
 import com.leximemory.backend.models.entities.Word;
@@ -51,26 +53,62 @@ public class WordService {
   }
 
   /**
+   * Create complete word.
+   *
+   * @param wordCompleteDto the word
+   * @return the word
+   */
+
+  public Word createCompleteWord(WordCompleteDto wordCompleteDto) {
+    Word newWord = createWord(new WordCreationDto(
+        wordCompleteDto.word(),
+        wordCompleteDto.wordRank(),
+        wordCompleteDto.repetitions()
+    ));
+
+    createWordExampleSentences(1, newWord.getId(), wordCompleteDto.exampleSentences());
+
+    return wordRepository.save(newWord);
+  }
+
+  /**
    * Create word.
    *
-   * @param wordCreationDto the word
+   * @param wordCreationDto the word creation dto
+   * @return the word
+   */
+  public Word createWord(WordCreationDto wordCreationDto) {
+    List<Word> words = wordRepository.findByWordIgnoreCase(wordCreationDto.word());
+
+    return createWord(wordCreationDto, words);
+  }
+
+  /**
+   * Create word.
+   *
+   * @param wordCreationDto the wor
+   * @param words           the words
    * @return the word
    */
   @Transactional
-  public Word createWord(WordCreationDto wordCreationDto) {
-    try {
-      getWordByWord(wordCreationDto.word());
+  public Word createWord(
+      WordCreationDto wordCreationDto,
+      List<Word> words
+  ) {
+    List<String> wordWords = words.stream().map(Word::getWord).toList();
+
+    if (wordWords.contains(wordCreationDto.word())) {
       throw new WordAlreadyExistsException();
-    } catch (WordNotFoundException e) {
-      // do nothing
     }
 
-    Word existingWord = wordRepository.findAll().stream()
+    Word existingWord = words.stream()
         .filter(w -> w.getWord() != null && w.getWord().equalsIgnoreCase(wordCreationDto.word()))
         .findFirst()
         .orElse(null);
 
     Word newWord = new Word();
+    Word salvedWord = new Word();
+
     if (existingWord != null) {
       newWord.setType(existingWord.getType());
       newWord.setMeaning(existingWord.getMeaning());
@@ -82,54 +120,55 @@ public class WordService {
       newWord.setUserWords(new ArrayList<>(existingWord.getUserWords()));
 
       if (existingWord.getAudio() != null) {
-        Audio newAudio = new Audio();
-        newAudio.setAudio(existingWord.getAudio().getAudio());
-        newAudio.setSentence(newWord.getAudio().getSentence());
-        newWord.setAudio(newAudio);
+        salvedWord = wordRepository.save(newWord);
+
+        newWord.setAudio(audioService.createAudioCopy(existingWord.getAudio(), salvedWord));
       }
     } else {
       newWord.setType(TextHandler.getWordType(wordCreationDto.word()));
       newWord.setWordRank(wordCreationDto.rank() != null ? wordCreationDto.rank()
-          : wordRepository.findAll().size() + 1);
+          : words.size() + 1);
       newWord.setRepetitions(
           wordCreationDto.repetitions() != null ? wordCreationDto.repetitions() : 0);
       newWord.setExempleSentences(new ArrayList<>());
       newWord.setQuestions(new ArrayList<>());
       newWord.setUserWords(new ArrayList<>());
-      newWord.setAudio(null);
+
+      salvedWord = wordRepository.save(newWord);
+
+      newWord.setAudio(audioService.createInitialWordAudio(salvedWord));
     }
 
     newWord.setWord(wordCreationDto.word());
 
-    return wordRepository.save(newWord);
+    return wordRepository.save(salvedWord);
   }
 
 
   /**
    * Create word example sentences word.
    *
-   * @param userId          the user id
-   * @param wordId          the word id
-   * @param wordCreationDto the word creation dto
+   * @param userId    the user id
+   * @param wordId    the word id
+   * @param sentences the sentences
    * @return the word
    */
+  @Transactional
   public Word createWordExampleSentences(
       Integer userId,
       Integer wordId,
-      WordCreationDto wordCreationDto
+      WordSentencesDto sentences
   ) {
     User user = userService.getUserById(userId);
     Word word = getWordById(wordId);
     List<Sentence> exampleSentences = new ArrayList<>();
 
-    for (int i = 0; i < wordCreationDto.sentences().size(); i++) {
+    for (WordSentenceDto sentence : sentences.sentences()) {
 
-      List<String> textSentence = TextHandler.splitTextIntoWords(
-          wordCreationDto.sentences().get(i));
-      String translation = wordCreationDto.translations().get(i);
+      List<String> textSentence = TextHandler.splitTextIntoWords(sentence.textSentence());
 
       exampleSentences.add(sentenceService.createWordSentence(
-          user, word, textSentence, translation));
+          user, word, textSentence, sentence.translation(), sentence.tatoebaAudioId()));
     }
 
     word.setExempleSentences(exampleSentences);
@@ -144,12 +183,11 @@ public class WordService {
    * @return the word by word
    */
   public Word getWordByWord(String searchedWord) {
-    Optional<Word> word = wordRepository.findByWord(searchedWord);
-    if (word.isEmpty() || !searchedWord.equals(word.get().getWord())) {
-      throw new WordNotFoundException();
-    }
-
-    return word.get();
+    return wordRepository.findByWordIgnoreCase(searchedWord)
+        .stream()
+        .filter(w -> w.getWord().equalsIgnoreCase(searchedWord))
+        .findFirst()
+        .orElseThrow(WordNotFoundException::new);
   }
 
   /**
@@ -158,9 +196,8 @@ public class WordService {
    * @param searchedWord the searched word
    * @return the word by word ignore case
    */
-  public Word getWordByWordIgnoreCase(String searchedWord) {
-    return wordRepository.findByWord(searchedWord)
-        .orElseThrow(WordNotFoundException::new);
+  public List<Word> getWordByWordIgnoreCase(String searchedWord) {
+    return wordRepository.findByWordIgnoreCase(searchedWord);
   }
 
   /**

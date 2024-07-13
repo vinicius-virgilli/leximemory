@@ -13,7 +13,7 @@ public record SentenceResponseDto(
     String textSentence,
     String translation,
     List<UserWordId> sentence,
-    byte[] audio
+    Integer tatoebaAudioId
 ) {
 
   /**
@@ -30,7 +30,7 @@ public record SentenceResponseDto(
         sentence.getSentence().stream().map(
             UserWord::getId
         ).toList(),
-        sentence.getAudio().getAudio()
+        sentence.getTatoebaAudioId()
     );
   }
 }

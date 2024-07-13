@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserTextService {
 
-  private final UserService userService;
   private final UserTextRepository userTextRepository;
+  private final UserService userService;
   private final SentenceService sentenceService;
 
   /**
@@ -85,6 +85,7 @@ public class UserTextService {
     User user = userService.getUserById(userId);
 
     UserText newUserText = new UserText();
+
     newUserText.setUser(user);
     newUserText.setTitle(userTextDto.title());
     newUserText.setSubject(userTextDto.subject());

@@ -11,6 +11,21 @@ public record AudioDto(
 ) {
 
   /**
+   * To entity audio.
+   *
+   * @return the audio
+   */
+  public Audio toEntity() {
+    return new Audio(
+        id,
+        audio,
+        null,
+        null,
+        null
+    );
+  }
+
+  /**
    * From entity audio dto.
    *
    * @param newAudio the new audio

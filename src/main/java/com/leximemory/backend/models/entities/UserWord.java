@@ -17,6 +17,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -52,5 +53,6 @@ public class UserWord {
   private FlashCard flashCard;
 
   @ManyToMany(mappedBy = "sentence")
+  @EqualsAndHashCode.Exclude
   List<Sentence> sentences;
 }

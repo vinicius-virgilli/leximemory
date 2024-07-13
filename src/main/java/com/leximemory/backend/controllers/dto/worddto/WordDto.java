@@ -1,9 +1,7 @@
 package com.leximemory.backend.controllers.dto.worddto;
 
-import com.leximemory.backend.controllers.dto.sentencedto.SentenceDto;
 import com.leximemory.backend.models.entities.Word;
 import com.leximemory.backend.models.enums.WordType;
-import java.util.List;
 
 /**
  * The type Word creation dto.

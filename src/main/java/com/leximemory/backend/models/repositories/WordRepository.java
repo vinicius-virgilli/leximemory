@@ -20,4 +20,12 @@ public interface WordRepository extends JpaRepository<Word, Integer> {
    * @return the optional
    */
   Optional<Word> findByWord(String word);
+
+  /**
+   * Find by word ignore case list.
+   *
+   * @param word the word
+   * @return the list
+   */
+  List<Word> findByWordIgnoreCase(String word);
 }

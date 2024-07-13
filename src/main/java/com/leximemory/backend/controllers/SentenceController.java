@@ -1,6 +1,6 @@
 package com.leximemory.backend.controllers;
 
-import com.leximemory.backend.controllers.dto.sentencedto.SentenceDto;
+import com.leximemory.backend.controllers.dto.sentencedto.WordSentenceDto;
 import com.leximemory.backend.models.entities.Sentence;
 import com.leximemory.backend.services.SentenceService;
 import java.util.List;
@@ -40,13 +40,13 @@ public class SentenceController {
    */
   @GetMapping("/{userTextId}/sentences")
   @ResponseStatus(HttpStatus.OK)
-  public List<SentenceDto> getAllSentencesByUserTextId(
+  public List<WordSentenceDto> getAllSentencesByUserTextId(
       @PathVariable("userId") Integer userId,
       @PathVariable("userTextId") Integer userTextId
   ) {
     List<Sentence> sentences = sentenceService.getAllByUserTextId(userTextId);
     return sentences.stream()
-        .map(SentenceDto::fromEntity)
+        .map(WordSentenceDto::fromEntity)
         .toList();
   }
 }
