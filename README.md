@@ -1,6 +1,6 @@
 ## LexiMemory: Aprendizado de Inglês
 
-🚧 **Projeto em construção, com inauguração planejada para final de agosto a início de setembro de 2024.** 🚧
+🚧 **Projeto interrompido.** 🚧
 
 #### Descrição do Projeto
 LexiMemory é uma aplicação inovadora voltada para o aprendizado de inglês. O objetivo principal é ajudar os usuários a expandirem seu vocabulário e alcançarem fluência no idioma de forma eficaz e duradoura. A aplicação oferece diversas funcionalidades para facilitar o estudo de palavras e a compreensão de textos.
