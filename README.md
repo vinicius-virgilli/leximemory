@@ -3,7 +3,7 @@
 🚧 **Projeto interrompido.** 🚧
 
 #### Descrição do Projeto
-LexiMemory é uma aplicação inovadora voltada para o aprendizado de inglês. O objetivo principal é ajudar os usuários a expandirem seu vocabulário e alcançarem fluência no idioma de forma eficaz e duradoura. A aplicação oferece diversas funcionalidades para facilitar o estudo de palavras e a compreensão de textos.
+LexiMemory é uma aplicação voltada para o aprendizado de inglês. O objetivo principal é ajudar os usuários a expandirem seu vocabulário e alcançarem fluência no idioma de forma eficaz e duradoura. A aplicação oferece diversas funcionalidades para facilitar o estudo de palavras e a compreensão de textos.
 
 Funcionalidades Principais
 - **Estudo por meio do método de interpretação de texto com gradativa dificuldade:** Os usuários podem adicionar textos na aplicação e as palavras desconhecidas serão destacadas, facilitando o aprendizado.
